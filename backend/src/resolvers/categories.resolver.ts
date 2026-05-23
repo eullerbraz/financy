@@ -16,13 +16,13 @@ import { IsAuthenticated } from '../middlewares/auth.middleware';
 import { CategoryModel } from '../models/category.model';
 import { UserModel } from '../models/user.model';
 import { CategoriesService } from '../services/categories.service';
-import { UserService } from '../services/user.service';
+import { UsersService } from '../services/users.service';
 
 @Resolver(() => CategoryModel)
 @UseMiddleware(IsAuthenticated)
 export class CategoryResolver {
   private categoryService = new CategoriesService();
-  private userService = new UserService();
+  private userService = new UsersService();
 
   @Mutation(() => CategoryModel)
   async createCategory(
