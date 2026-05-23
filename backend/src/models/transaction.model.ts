@@ -17,7 +17,7 @@ registerEnumType(TransactionType, {
 });
 
 @ObjectType()
-export class CategoryModel {
+export class TransactionModel {
   @Field(() => ID)
   id!: string;
 
@@ -25,7 +25,7 @@ export class CategoryModel {
   description!: string;
 
   @Field(() => GraphQLISODateTime)
-  date!: string;
+  date!: Date;
 
   @Field(() => Number)
   amount!: number;

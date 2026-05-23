@@ -14,8 +14,10 @@ import {
 import { GqlUser } from '../graphql/decorators/user.decorator';
 import { IsAuthenticated } from '../middlewares/auth.middleware';
 import { CategoryModel } from '../models/category.model';
+import { TransactionModel } from '../models/transaction.model';
 import { UserModel } from '../models/user.model';
 import { CategoriesService } from '../services/categories.service';
+import { TransactionsService } from '../services/transactions.service';
 import { UsersService } from '../services/users.service';
 
 @Resolver(() => CategoryModel)
@@ -23,6 +25,7 @@ import { UsersService } from '../services/users.service';
 export class CategoryResolver {
   private categoryService = new CategoriesService();
   private userService = new UsersService();
+  private transactionService = new TransactionsService();
 
   @Mutation(() => CategoryModel)
   async createCategory(
@@ -66,5 +69,12 @@ export class CategoryResolver {
   @FieldResolver(() => UserModel)
   async user(@Root() category: CategoryModel): Promise<UserModel> {
     return this.userService.getUserById(category.userId);
+  }
+
+  @FieldResolver(() => [TransactionModel])
+  async transactions(
+    @Root() category: CategoryModel,
+  ): Promise<TransactionModel[]> {
+    return this.transactionService.getAllTransactionsByCategoryId(category.id);
   }
 }

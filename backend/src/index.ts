@@ -9,6 +9,7 @@ import { buildSchema } from 'type-graphql';
 import { buildContext } from './graphql/context';
 import { AuthResolver } from './resolvers/auth.resolver';
 import { CategoryResolver } from './resolvers/categories.resolver';
+import { TransactionResolver } from './resolvers/transactions.resolver';
 
 const PORT = 4000;
 
@@ -23,7 +24,7 @@ async function bootstrap() {
   );
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver, CategoryResolver],
+    resolvers: [AuthResolver, CategoryResolver, TransactionResolver],
     validate: false,
     emitSchemaFile: './schema.graphql',
   });

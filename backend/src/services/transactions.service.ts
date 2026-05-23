@@ -38,6 +38,14 @@ export class TransactionsService {
     });
   }
 
+  async getAllTransactionsByCategoryId(categoryId: string) {
+    return prismaClient.transaction.findMany({
+      where: {
+        categoryId,
+      },
+    });
+  }
+
   async updateTransactionById(id: string, data: UpdateTransactionInput) {
     const transaction = await prismaClient.transaction.findUnique({
       where: { id },
