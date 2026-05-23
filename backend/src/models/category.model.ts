@@ -36,7 +36,10 @@ export class CategoryModel {
   icon!: string;
 
   @Field(() => Colors)
-  color!: Colors;
+  color!: string;
+
+  @Field(() => String)
+  userId!: string;
 
   @Field(() => GraphQLISODateTime)
   createdAt!: Date;
