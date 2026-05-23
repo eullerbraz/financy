@@ -29,7 +29,7 @@ export class CategoriesService {
     return category;
   }
 
-  async getCategoriesByUserId(userId: string) {
+  async getAllCategoriesByUserId(userId: string) {
     return prismaClient.category.findMany({
       where: {
         userId,
