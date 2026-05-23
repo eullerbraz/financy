@@ -4,17 +4,12 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import cors from 'cors';
 import express from 'express';
-import { buildSchema, Query, Resolver } from 'type-graphql';
+import { buildSchema } from 'type-graphql';
+
+import { buildContext } from './graphql/context';
+import { AuthResolver } from './resolvers/auth.resolver';
 
 const PORT = 4000;
-
-@Resolver()
-class HelloResolver {
-  @Query(() => String)
-  async hello(): Promise<string> {
-    return 'Hello, world!';
-  }
-}
 
 async function bootstrap() {
   const app = express();
@@ -27,7 +22,7 @@ async function bootstrap() {
   );
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver],
+    resolvers: [AuthResolver],
     validate: false,
     emitSchemaFile: './schema.graphql',
   });
@@ -38,7 +33,14 @@ async function bootstrap() {
 
   await server.start();
 
-  app.use('/graphql', express.json(), expressMiddleware(server));
+  app.use(
+    '/graphql',
+    express.json(),
+
+    expressMiddleware(server, {
+      context: buildContext,
+    }),
+  );
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}/graphql`);
