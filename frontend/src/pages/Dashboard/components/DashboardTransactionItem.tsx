@@ -3,7 +3,7 @@ import { CircleArrowDown, CircleArrowUp } from 'lucide-react';
 import { colorsMap, type Transaction } from '..';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
-import { formatCurrency } from '../../../utils/format-currency';
+import { formatAmount } from '../../../utils/format-amount';
 
 export function DashboardTransactionItem({
   transaction,
@@ -48,7 +48,7 @@ export function DashboardTransactionItem({
             'min-w-32 flex items-center justify-center gap-2 text-sm font-semibold tabular-nums text-gray-800',
           )}
         >
-          <span>{formatCurrency(transaction.amount)}</span>
+          <span>{formatAmount(transaction.amount)}</span>
           {transaction.tone === 'inflow' ? (
             <CircleArrowUp className='size-4 text-green-dark' />
           ) : (

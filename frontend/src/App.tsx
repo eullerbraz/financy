@@ -3,6 +3,7 @@ import { Page } from './components/Page';
 import { Login } from './pages/Auth/Login';
 import { Signup } from './pages/Auth/Signup';
 import { Dashboard } from './pages/Dashboard';
+import { Transactions } from './pages/Transactions';
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
         element={
           <Page hasHeader={true}>
             <Dashboard />
+          </Page>
+        }
+      />
+      <Route
+        path='/transactions'
+        element={
+          <Page hasHeader={true}>
+            <Transactions />
           </Page>
         }
       />
