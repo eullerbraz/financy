@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Page } from './components/Page';
 import { Login } from './pages/Auth/Login';
 import { Signup } from './pages/Auth/Signup';
+import { Dashboard } from './pages/Dashboard';
 
 function App() {
   return (
@@ -19,6 +20,14 @@ function App() {
         element={
           <Page hasHeader={false}>
             <Login />
+          </Page>
+        }
+      />
+      <Route
+        path='/'
+        element={
+          <Page hasHeader={true}>
+            <Dashboard />
           </Page>
         }
       />
