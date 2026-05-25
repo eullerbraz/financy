@@ -163,7 +163,7 @@ const transactions: Transaction[] = [
 
 export function Transactions() {
   return (
-    <div className='flex  flex-1 gap-8 flex-col w-full p-12 justify-start'>
+    <div className='flex flex-1 gap-8 flex-col w-full p-12 justify-start'>
       <header className='flex justify-between items-center gap-4'>
         <div className='flex flex-col gap-0.5'>
           <h1 className='text-2xl font-bold text-gray-800'>Transações</h1>

@@ -1,10 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-  CircleArrowDown,
-  CircleArrowUp,
-  SquarePen,
-  Trash2,
-} from 'lucide-react';
+import { CircleArrowDown, CircleArrowUp, SquarePen, Trash } from 'lucide-react';
 import { colorsMap, type Transaction } from '..';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
@@ -69,7 +64,7 @@ export function TransactionsTableItem({
             variant='outline'
             className='border-gray-300 text-red'
           >
-            <Trash2 className='size-4 text-feedback-danger' />
+            <Trash className='size-4 text-feedback-danger' />
           </Button>
 
           <Button

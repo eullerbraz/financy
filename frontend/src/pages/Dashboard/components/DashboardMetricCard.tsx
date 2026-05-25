@@ -16,9 +16,7 @@ export function DashboardMetricCard({ metric }: { metric: Metric }) {
     <Card className='flex gap-3 p-6 m-0 border border-gray-200 bg-white'>
       <CardContent className='flex flex-col gap-4 items-start p-0'>
         <div className='flex gap-3 text-xs font-medium uppercase text-gray-500 tracking-wide'>
-          <span className={cn('', toneClasses[metric.tone])}>
-            <Icon className='size-5' />
-          </span>
+          <Icon className={cn('size-5', toneClasses[metric.tone])} />
           <span>{metric.label}</span>
         </div>
         <span className='text-3xl font-bold text-gray-800 tabular-nums'>
