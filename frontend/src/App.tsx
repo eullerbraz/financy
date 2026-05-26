@@ -4,6 +4,7 @@ import { Login } from './pages/Auth/Login';
 import { Signup } from './pages/Auth/Signup';
 import { Categories } from './pages/Categories';
 import { Dashboard } from './pages/Dashboard';
+import { Profile } from './pages/Profile';
 import { Transactions } from './pages/Transactions';
 
 function App() {
@@ -22,6 +23,14 @@ function App() {
         element={
           <Page hasHeader={false}>
             <Login />
+          </Page>
+        }
+      />
+      <Route
+        path='/profile'
+        element={
+          <Page hasHeader={true}>
+            <Profile />
           </Page>
         }
       />

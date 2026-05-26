@@ -59,11 +59,15 @@ export function Header() {
               </Button>
             </Link>
           </div>
-          <Avatar>
-            <AvatarFallback className='bg-gray-300 text-gray-800'>
-              {nameInitials}
-            </AvatarFallback>
-          </Avatar>
+          <Link to='/profile'>
+            <Button size='icon' variant='ghost'>
+              <Avatar>
+                <AvatarFallback className='bg-gray-300 text-gray-800'>
+                  {nameInitials}
+                </AvatarFallback>
+              </Avatar>
+            </Button>
+          </Link>
         </div>
       )}
     </header>
