@@ -7,204 +7,264 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  BriefcaseBusiness,
   ChevronRight,
   CircleArrowDown,
   CircleArrowUp,
-  Fuel,
-  Landmark,
-  Pizza,
   Plus,
-  ShoppingCart,
   Wallet,
 } from 'lucide-react';
+import {
+  Colors,
+  IconsEnum,
+  TransactionType,
+  type Category,
+  type Transaction,
+} from '../../types';
 import { DashboardCategoryItem } from './components/DashboardCategoryItem';
 import { DashboardMetricCard } from './components/DashboardMetricCard';
 import { DashboardTransactionItem } from './components/DashboardTransactionItem';
 
-export type MetricTone = 'purple' | 'brand' | 'red';
-export type TransactionTone = 'inflow' | 'outflow';
-
-export type Metric = {
+export interface DashboardMetric {
   label: string;
   value: number;
   icon: typeof Wallet;
-  tone: MetricTone;
-};
-
-export type Transaction = {
-  title: string;
-  date: string;
-  amount: number;
-  category: Category;
-  tone: TransactionTone;
-  icon: typeof Landmark;
-};
-
-export type Category = {
-  name: string;
-  items: number;
-  amount: number;
   color: string;
-};
+}
 
-const metrics: Metric[] = [
+const metrics: DashboardMetric[] = [
   {
     label: 'Saldo total',
     value: 12847.32,
     icon: Wallet,
-    tone: 'purple',
+    color: Colors.purple,
   },
   {
     label: 'Receitas do mês',
     value: 4250.0,
     icon: CircleArrowUp,
-    tone: 'brand',
+    color: Colors.green,
   },
   {
     label: 'Despesas do mês',
     value: 2180.45,
     icon: CircleArrowDown,
-    tone: 'red',
+    color: Colors.red,
   },
 ];
 
 const recentTransactions: Transaction[] = [
   {
-    title: 'Pagamento de Salário',
-    date: '01/12/25',
-    amount: 4250.0,
-    category: {
-      name: 'Receita',
-      color: 'green',
-      items: 1,
-      amount: 4250.0,
-    },
-    tone: 'inflow',
-    icon: BriefcaseBusiness,
-  },
-  {
-    title: 'Jantar no Restaurante',
-    date: '30/11/25',
+    id: 't-1',
+    description: 'Jantar no Restaurante',
+    date: new Date('30/11/25'),
     amount: -89.5,
+    type: TransactionType.outflow,
+    categoryId: 'c-1',
+    userId: 'u-1',
     category: {
+      id: 'c-1',
       name: 'Alimentação',
-      color: 'blue',
-      items: 1,
-      amount: 89.5,
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    tone: 'outflow',
-    icon: Pizza,
   },
   {
-    title: 'Posto de Gasolina',
-    date: '29/11/25',
-    amount: -100.0,
+    id: 't-2',
+    description: 'Posto de Gasolina',
+    date: new Date('29/11/25'),
+    amount: -100,
+    type: TransactionType.outflow,
+    categoryId: 'c-2',
+    userId: 'u-1',
     category: {
+      id: 'c-2',
       name: 'Transporte',
-      color: 'purple',
-      items: 1,
-      amount: 100.0,
+      color: Colors.purple,
+      icon: IconsEnum.CarFront,
+      userId: 'u-1',
     },
-    tone: 'outflow',
-    icon: Fuel,
   },
   {
-    title: 'Compras no Mercado',
-    date: '28/11/25',
+    id: 't-3',
+    description: 'Compras no Mercado',
+    date: new Date('28/11/25'),
     amount: -156.8,
+    type: TransactionType.outflow,
+    categoryId: 'c-3',
+    userId: 'u-1',
     category: {
+      id: 'c-3',
       name: 'Mercado',
-      color: 'orange',
-      items: 1,
-      amount: 156.8,
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    tone: 'outflow',
-    icon: ShoppingCart,
   },
   {
-    title: 'Retorno de Investimento',
-    date: '26/11/25',
+    id: 't-4',
+    description: 'Retorno de Investimento',
+    date: new Date('26/11/25'),
     amount: 340.25,
+    type: TransactionType.inflow,
+    categoryId: 'c-4',
+    userId: 'u-1',
     category: {
+      id: 'c-4',
       name: 'Investimento',
-      color: 'green',
-      items: 1,
-      amount: 340.25,
+      color: Colors.green,
+      icon: IconsEnum.PiggyBank,
+      userId: 'u-1',
     },
-    tone: 'inflow',
-    icon: Wallet,
+  },
+  {
+    id: 't-5',
+    description: 'Aluguel',
+    date: new Date('26/11/25'),
+    amount: -1700,
+    type: TransactionType.outflow,
+    categoryId: 'c-5',
+    userId: 'u-1',
+    category: {
+      id: 'c-5',
+      name: 'Utilidades',
+      color: Colors.yellow,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
+    },
+  },
+  {
+    id: 't-6',
+    description: 'Freelance',
+    date: new Date('24/11/25'),
+    amount: 2500,
+    type: TransactionType.inflow,
+    categoryId: 'c-6',
+    userId: 'u-1',
+    category: {
+      id: 'c-6',
+      name: 'Salario',
+      color: Colors.green,
+      icon: IconsEnum.BriefcaseBusiness,
+      userId: 'u-1',
+    },
+  },
+  {
+    id: 't-7',
+    description: 'Compras Jantar',
+    date: new Date('22/11/25'),
+    amount: -150,
+    type: TransactionType.outflow,
+    categoryId: 'c-7',
+    userId: 'u-1',
+    category: {
+      id: 'c-7',
+      name: 'Mercado',
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
+    },
+  },
+  {
+    id: 't-8',
+    description: 'Cinema',
+    date: new Date('18/11/25'),
+    amount: -88,
+    type: TransactionType.outflow,
+    categoryId: 'c-8',
+    userId: 'u-1',
+    category: {
+      id: 'c-8',
+      name: 'Entretenimento',
+      color: Colors.pink,
+      icon: IconsEnum.Ticket,
+      userId: 'u-1',
+    },
   },
 ];
 
 const categories: Category[] = [
   {
+    id: 'c-1',
     name: 'Alimentação',
-    items: 12,
-    amount: 542.3,
-    color: 'blue',
+    description: 'Restaurantes, delivery e refeições',
+    userId: 'u-1',
+    countTransactions: 12,
+    transactionAmount: 542.3,
+    color: Colors.blue,
+    icon: IconsEnum.Utensils,
   },
   {
-    name: 'Transporte',
-    items: 8,
-    amount: 385.5,
-    color: 'purple',
-  },
-  {
-    name: 'Mercado',
-    items: 3,
-    amount: 298.75,
-    color: 'orange',
-  },
-  {
+    id: 'c-2',
     name: 'Entretenimento',
-    items: 2,
-    amount: 186.2,
-    color: 'pink',
+    description: 'Cinema, jogos e lazer',
+    userId: 'u-1',
+    countTransactions: 2,
+    transactionAmount: 186.2,
+    color: Colors.pink,
+    icon: IconsEnum.Ticket,
   },
   {
+    id: 'c-3',
+    name: 'Investimento',
+    description: 'Aplicações e retornos financeiros',
+    userId: 'u-1',
+    countTransactions: 1,
+    transactionAmount: 340.25,
+    color: Colors.green,
+    icon: IconsEnum.PiggyBank,
+  },
+  {
+    id: 'c-4',
+    name: 'Mercado',
+    description: 'Compras de supermercado e mantimentos',
+    userId: 'u-1',
+    countTransactions: 3,
+    transactionAmount: 298.75,
+    color: Colors.orange,
+    icon: IconsEnum.ShoppingCart,
+  },
+  {
+    id: 'c-5',
+    name: 'Salário',
+    description: 'Renda mensal e bonificações',
+    userId: 'u-1',
+    countTransactions: 3,
+    transactionAmount: 6750,
+    color: Colors.green,
+    icon: IconsEnum.BriefcaseBusiness,
+  },
+  {
+    id: 'c-6',
+    name: 'Saúde',
+    description: 'Medicamentos, consultas e exames',
+    userId: 'u-1',
+    countTransactions: 0,
+    transactionAmount: 0,
+    color: Colors.pink,
+    icon: IconsEnum.HeartPulse,
+  },
+  {
+    id: 'c-7',
+    name: 'Transporte',
+    description: 'Gasolina, transporte público e viagens',
+    userId: 'u-1',
+    countTransactions: 8,
+    transactionAmount: 385.5,
+    color: Colors.purple,
+    icon: IconsEnum.CarFront,
+  },
+  {
+    id: 'c-8',
     name: 'Utilidades',
-    items: 7,
-    amount: 245.8,
-    color: 'yellow',
+    description: 'Energia, água, internet e telefone',
+    userId: 'u-1',
+    countTransactions: 7,
+    transactionAmount: 245.8,
+    color: Colors.yellow,
+    icon: IconsEnum.ToolCase,
   },
 ];
-
-export const colorsMap: Record<
-  string,
-  { bg: string; text: string; textDark: string }
-> = {
-  blue: {
-    bg: 'bg-blue-light',
-    text: 'text-blue',
-    textDark: 'text-blue-dark',
-  },
-  purple: {
-    bg: 'bg-purple-light',
-    text: 'text-purple',
-    textDark: 'text-purple-dark',
-  },
-  orange: {
-    bg: 'bg-orange-light',
-    text: 'text-orange',
-    textDark: 'text-orange-dark',
-  },
-  pink: {
-    bg: 'bg-pink-light',
-    text: 'text-pink',
-    textDark: 'text-pink-dark',
-  },
-  yellow: {
-    bg: 'bg-yellow-light',
-    text: 'text-yellow',
-    textDark: 'text-yellow-dark',
-  },
-  green: {
-    bg: 'bg-green-light',
-    text: 'text-green',
-    textDark: 'text-green-dark',
-  },
-};
 
 export function Dashboard() {
   return (
@@ -236,7 +296,7 @@ export function Dashboard() {
           <CardContent className='p-0'>
             {recentTransactions.map((transaction) => (
               <DashboardTransactionItem
-                key={`${transaction.title}-${transaction.date}`}
+                key={transaction.id}
                 transaction={transaction}
               />
             ))}

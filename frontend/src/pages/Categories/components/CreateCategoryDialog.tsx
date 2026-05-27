@@ -13,7 +13,7 @@ import { IconsEnum, type Colors } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
 
-export const colorsMap = {
+const colorsMap = {
   green: 'bg-green',
   blue: 'bg-blue',
   purple: 'bg-purple',

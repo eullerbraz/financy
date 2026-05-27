@@ -1,16 +1,52 @@
 import { cn } from '@/lib/utils';
 import { CircleArrowDown, CircleArrowUp } from 'lucide-react';
-import { colorsMap, type Transaction } from '..';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
+import { IconsMap, TransactionType, type Transaction } from '../../../types';
 import { formatAmount } from '../../../utils/format-amount';
+
+const colorsMap: Record<
+  string,
+  { bg: string; text: string; textDark: string }
+> = {
+  blue: {
+    bg: 'bg-blue-light',
+    text: 'text-blue',
+    textDark: 'text-blue-dark',
+  },
+  purple: {
+    bg: 'bg-purple-light',
+    text: 'text-purple',
+    textDark: 'text-purple-dark',
+  },
+  orange: {
+    bg: 'bg-orange-light',
+    text: 'text-orange',
+    textDark: 'text-orange-dark',
+  },
+  pink: {
+    bg: 'bg-pink-light',
+    text: 'text-pink',
+    textDark: 'text-pink-dark',
+  },
+  yellow: {
+    bg: 'bg-yellow-light',
+    text: 'text-yellow',
+    textDark: 'text-yellow-dark',
+  },
+  green: {
+    bg: 'bg-green-light',
+    text: 'text-green',
+    textDark: 'text-green-dark',
+  },
+};
 
 export function DashboardTransactionItem({
   transaction,
 }: {
   transaction: Transaction;
 }) {
-  const Icon = transaction.icon;
+  const Icon = IconsMap[transaction.category.icon as keyof typeof IconsMap];
 
   const bgColorLight = colorsMap[transaction.category.color].bg;
   const textColor = colorsMap[transaction.category.color].text;
@@ -27,10 +63,14 @@ export function DashboardTransactionItem({
 
         <div>
           <p className='text-base font-medium text-gray-800'>
-            {transaction.title}
+            {transaction.description}
           </p>
           <p className='text-sm font-normal text-gray-600'>
-            {transaction.date}
+            {transaction.date.toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+            })}
           </p>
         </div>
       </div>
@@ -49,7 +89,7 @@ export function DashboardTransactionItem({
           )}
         >
           <span>{formatAmount(transaction.amount)}</span>
-          {transaction.tone === 'inflow' ? (
+          {transaction.type === TransactionType.inflow ? (
             <CircleArrowUp className='size-4 text-green-dark' />
           ) : (
             <CircleArrowDown className='size-4 text-red-dark' />

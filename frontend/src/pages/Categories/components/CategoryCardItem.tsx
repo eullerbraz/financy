@@ -10,7 +10,7 @@ import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
 import { IconsMap, type Category } from '../../../types';
 
-export const colorsMap = {
+const colorsMap = {
   blue: {
     bg: 'bg-blue-light',
     text: 'text-blue',

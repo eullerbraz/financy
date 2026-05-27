@@ -1,5 +1,5 @@
-import type { Category } from '..';
 import { CategoryTag } from '../../../components/CategoryTag';
+import type { Category } from '../../../types';
 import { formatCurrency } from '../../../utils/format-currency';
 
 export function DashboardCategoryItem({ category }: { category: Category }) {
@@ -13,10 +13,10 @@ export function DashboardCategoryItem({ category }: { category: Category }) {
 
       <div className='flex items-center justify-end flex-1'>
         <span className='min-w-16 text-sm font-normal text-gray-600 text-right'>
-          {category.items} itens
+          {category.countTransactions} itens
         </span>
         <span className='min-w-24 text-sm font-semibold text-gray-800 text-right'>
-          {formatCurrency(category.amount)}
+          {formatCurrency(category.transactionAmount!)}
         </span>
       </div>
     </div>
