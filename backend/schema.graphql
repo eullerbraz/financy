@@ -5,6 +5,7 @@
 
 type CategoryModel {
   color: Colors!
+  countTransactions: Float
   createdAt: DateTimeISO!
   description: String
   icon: String!
