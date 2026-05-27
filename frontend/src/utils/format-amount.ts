@@ -1,6 +1,10 @@
+import { TransactionType } from '../types';
 import { formatCurrency } from './format-currency';
 
-export function formatAmount(value: number) {
+export function formatAmount(
+  value: number,
+  type: TransactionType = TransactionType.inflow,
+): string {
   const abs = Math.abs(value);
-  return `${value >= 0 ? '+' : '-'} ${formatCurrency(abs)}`;
+  return `${type === TransactionType.inflow ? '+' : '-'} ${formatCurrency(abs)}`;
 }

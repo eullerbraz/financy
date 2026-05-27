@@ -94,7 +94,7 @@ export function TransactionsTableItem({
           </div>
           <div className='min-w-40 flex items-center justify-end'>
             <span className='text-sm font-semibold tabular-nums text-gray-800'>
-              {formatAmount(transaction.amount)}
+              {formatAmount(transaction.amount, transaction.type)}
             </span>
           </div>
           <div className='min-w-28 flex items-center justify-end gap-2'>

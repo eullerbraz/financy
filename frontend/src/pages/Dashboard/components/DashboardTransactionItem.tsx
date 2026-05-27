@@ -88,7 +88,7 @@ export function DashboardTransactionItem({
             'min-w-32 flex items-center justify-center gap-2 text-sm font-semibold tabular-nums text-gray-800',
           )}
         >
-          <span>{formatAmount(transaction.amount)}</span>
+          <span>{formatAmount(transaction.amount, transaction.type)}</span>
           {transaction.type === TransactionType.inflow ? (
             <CircleArrowUp className='size-4 text-green-dark' />
           ) : (
