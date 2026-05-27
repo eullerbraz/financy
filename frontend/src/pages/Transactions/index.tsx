@@ -9,6 +9,8 @@ import {
   Ticket,
   Wallet,
 } from 'lucide-react';
+import { useState } from 'react';
+import { CreateTransactionDialog } from './components/CreateTransactionDialog.tsx';
 import { TransactionsFilters } from './components/TransactionsFilters.tsx';
 import { TransactionsTable } from './components/TransactionsTable.tsx';
 
@@ -162,28 +164,36 @@ const transactions: Transaction[] = [
 ];
 
 export function Transactions() {
+  const [openDialog, setOpenDialog] = useState(false);
+
   return (
-    <div className='flex flex-1 gap-8 flex-col w-full p-12 justify-start'>
-      <header className='flex justify-between items-center gap-4'>
-        <div className='flex flex-col gap-0.5'>
-          <h1 className='text-2xl font-bold text-gray-800'>Transações</h1>
-          <p className='text-base font-normal text-gray-600'>
-            Gerencie todas as suas transacoes financeiras
-          </p>
-        </div>
+    <>
+      <div className='flex flex-1 gap-8 flex-col w-full p-12 justify-start'>
+        <header className='flex justify-between items-center gap-4'>
+          <div className='flex flex-col gap-0.5'>
+            <h1 className='text-2xl font-bold text-gray-800'>Transações</h1>
+            <p className='text-base font-normal text-gray-600'>
+              Gerencie todas as suas transacoes financeiras
+            </p>
+          </div>
+          <Button
+            className='hover:bg-brand-dark text-sm font-medium text-white'
+            size='lg'
+            onClick={() => setOpenDialog(true)}
+          >
+            <Plus className='size-4' />
+            Nova transação
+          </Button>
+        </header>
+        <TransactionsFilters />
+        <TransactionsTable transactions={transactions} />
+      </div>
 
-        <Button
-          className='hover:bg-brand-dark text-sm font-medium text-white'
-          size='lg'
-        >
-          <Plus className='size-4' />
-          Nova transação
-        </Button>
-      </header>
-
-      <TransactionsFilters />
-
-      <TransactionsTable transactions={transactions} />
-    </div>
+      <CreateTransactionDialog
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+        onCreated={() => console.log('Transação criada')}
+      />
+    </>
   );
 }
