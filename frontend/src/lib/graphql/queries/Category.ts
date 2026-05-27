@@ -11,6 +11,7 @@ export const LIST_CATEGORIES: TypedDocumentNode<{
       description
       color
       icon
+      countTransactions
       createdAt
       updatedAt
     }

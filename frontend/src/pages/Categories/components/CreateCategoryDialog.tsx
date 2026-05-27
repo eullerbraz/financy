@@ -1,4 +1,6 @@
+import { useMutation } from '@apollo/client/react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -9,6 +11,7 @@ import {
 } from '../../../components/ui/dialog';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
+import { CREATE_CATEGORY } from '../../../lib/graphql/mutations/Category';
 import { Colors, IconsEnum } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
@@ -29,23 +32,32 @@ export function CreateCategoryDialog({
   const [icon, setIcon] = useState<IconsEnum | null>(null);
   const [color, setColor] = useState<Colors | null>(null);
 
-  const loading = false; // TODO: loading state from mutation
+  const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
+    onCompleted() {
+      toast.success('Category criada com sucesso');
 
-  // const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
-  //   onCompleted() {
-  //     toast.success('Category criada com sucesso');
-  //     onOpenChange(false);
-  //     onCreated?.();
-  //   },
-  //   onError() {
-  //     toast.error('Falha ao criar a ideia');
-  //   },
-  // });
+      onOpenChange(false);
+
+      onCreated?.();
+    },
+    onError() {
+      toast.error('Falha ao criar a ideia');
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    onCreated?.();
+    createCategory({
+      variables: {
+        data: {
+          name: title,
+          description,
+          icon,
+          color,
+        },
+      },
+    });
   };
 
   const clear = () => {
