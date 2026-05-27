@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
 import { IconsMap, type Category } from '../../../types';
+import { DeleteCategoryDialog } from './DeleteCategoryDialog';
 import { EditCategoryDialog } from './EditCategoryDialog';
 
 const colorsMap = {
@@ -47,6 +48,7 @@ const colorsMap = {
 
 export function CategoryCardItem({ category }: { category: Category }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const Icon = IconsMap[category.icon as keyof typeof IconsMap];
   const color = colorsMap[category.color as keyof typeof colorsMap];
@@ -69,6 +71,7 @@ export function CategoryCardItem({ category }: { category: Category }) {
               size='icon'
               variant='outline'
               className='border-gray-300 text-red'
+              onClick={() => setOpenDeleteDialog(true)}
             >
               <Trash className='size-4 text-feedback-danger' />
             </Button>
@@ -102,6 +105,13 @@ export function CategoryCardItem({ category }: { category: Category }) {
         open={openEditDialog}
         onOpenChange={setOpenEditDialog}
         onEdited={(category) => console.log(category)}
+      />
+
+      <DeleteCategoryDialog
+        category={category}
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onDeleted={(categoryId) => console.log(categoryId)}
       />
     </>
   );
