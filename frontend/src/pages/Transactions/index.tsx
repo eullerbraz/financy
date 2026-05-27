@@ -15,7 +15,7 @@ const transactions: Transaction[] = [
   {
     id: 't-1',
     description: 'Jantar no Restaurante',
-    date: new Date('30/11/25'),
+    date: new Date('2025-11-30T19:30:00.000Z'),
     amount: -89.5,
     type: TransactionType.outflow,
     categoryId: 'c-1',
@@ -31,7 +31,7 @@ const transactions: Transaction[] = [
   {
     id: 't-2',
     description: 'Posto de Gasolina',
-    date: new Date('29/11/25'),
+    date: new Date('2025-11-29T19:30:00.000Z'),
     amount: -100,
     type: TransactionType.outflow,
     categoryId: 'c-2',
@@ -47,7 +47,7 @@ const transactions: Transaction[] = [
   {
     id: 't-3',
     description: 'Compras no Mercado',
-    date: new Date('28/11/25'),
+    date: new Date('2025-11-28T19:30:00.000Z'),
     amount: -156.8,
     type: TransactionType.outflow,
     categoryId: 'c-3',
@@ -63,7 +63,7 @@ const transactions: Transaction[] = [
   {
     id: 't-4',
     description: 'Retorno de Investimento',
-    date: new Date('26/11/25'),
+    date: new Date('2025-11-26T19:30:00.000Z'),
     amount: 340.25,
     type: TransactionType.inflow,
     categoryId: 'c-4',
@@ -79,7 +79,7 @@ const transactions: Transaction[] = [
   {
     id: 't-5',
     description: 'Aluguel',
-    date: new Date('26/11/25'),
+    date: new Date('2025-11-26T19:30:00.000Z'),
     amount: -1700,
     type: TransactionType.outflow,
     categoryId: 'c-5',
@@ -95,7 +95,7 @@ const transactions: Transaction[] = [
   {
     id: 't-6',
     description: 'Freelance',
-    date: new Date('24/11/25'),
+    date: new Date('2025-11-24T19:30:00.000Z'),
     amount: 2500,
     type: TransactionType.inflow,
     categoryId: 'c-6',
@@ -111,7 +111,7 @@ const transactions: Transaction[] = [
   {
     id: 't-7',
     description: 'Compras Jantar',
-    date: new Date('22/11/25'),
+    date: new Date('2025-11-22T19:30:00.000Z'),
     amount: -150,
     type: TransactionType.outflow,
     categoryId: 'c-7',
@@ -127,7 +127,7 @@ const transactions: Transaction[] = [
   {
     id: 't-8',
     description: 'Cinema',
-    date: new Date('18/11/25'),
+    date: new Date('2025-11-18T19:30:00.000Z'),
     amount: -88,
     type: TransactionType.outflow,
     categoryId: 'c-8',
@@ -143,7 +143,7 @@ const transactions: Transaction[] = [
 ];
 
 export function Transactions() {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openCreateDialog, setCreateOpenDialog] = useState(false);
 
   return (
     <>
@@ -158,19 +158,24 @@ export function Transactions() {
           <Button
             className='hover:bg-brand-dark text-sm font-medium text-white'
             size='lg'
-            onClick={() => setOpenDialog(true)}
+            onClick={() => setCreateOpenDialog(true)}
           >
             <Plus className='size-4' />
             Nova transação
           </Button>
         </header>
         <TransactionsFilters />
-        <TransactionsTable transactions={transactions} />
+        <TransactionsTable
+          transactions={transactions}
+          onEditTransaction={(transaction) =>
+            console.log('Editar transação', transaction)
+          }
+        />
       </div>
 
       <CreateTransactionDialog
-        open={openDialog}
-        onOpenChange={setOpenDialog}
+        open={openCreateDialog}
+        onOpenChange={setCreateOpenDialog}
         onCreated={() => console.log('Transação criada')}
       />
     </>

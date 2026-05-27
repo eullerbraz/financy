@@ -14,6 +14,7 @@ export function TransactionsTable({
   transactions,
 }: {
   transactions: Transaction[];
+  onEditTransaction: (transaction: Transaction) => void;
 }) {
   return (
     <Card className='gap-0 overflow-hidden border border-gray-200 p-0'>
