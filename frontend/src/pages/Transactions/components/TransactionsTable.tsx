@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../../components/ui/button.tsx';
-import type { Transaction } from '../index.tsx';
+import type { Transaction } from '../../../types/index.ts';
 import { TransactionsTableItem } from './TransactionsTableItem.tsx';
 
 export function TransactionsTable({

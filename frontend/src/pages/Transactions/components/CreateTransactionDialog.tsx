@@ -17,15 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../components/ui/select';
+import { TransactionType } from '../../../types';
 import { TransactionTypeInput } from './TransactionTypeInput';
-
-export const TransactionTypeEnum = {
-  INFLOW: 'inflow',
-  OUTFLOW: 'outflow',
-} as const;
-
-export type TransactionType =
-  (typeof TransactionTypeEnum)[keyof typeof TransactionTypeEnum];
 
 interface CreateTransactionDialogProps {
   open: boolean;
@@ -38,11 +31,9 @@ export function CreateTransactionDialog({
   onOpenChange,
   onCreated,
 }: CreateTransactionDialogProps) {
-  const [type, setType] = useState<TransactionType>(
-    TransactionTypeEnum.OUTFLOW,
-  );
+  const [type, setType] = useState<TransactionType>(TransactionType.outflow);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<Date | null>(null);
   const [amount, setAmount] = useState<number | null>(null);
   const [category, setCategory] = useState<string | null>(null);
 
@@ -74,9 +65,9 @@ export function CreateTransactionDialog({
   };
 
   const clear = () => {
-    setType(TransactionTypeEnum.OUTFLOW);
+    setType(TransactionType.outflow);
     setDescription('');
-    setDate('');
+    setDate(null);
     setAmount(0);
     setCategory(null);
   };
@@ -106,7 +97,7 @@ export function CreateTransactionDialog({
             <TransactionTypeInput
               value={type}
               onValueChange={(value) =>
-                setType(value || TransactionTypeEnum.OUTFLOW)
+                setType(value || TransactionType.outflow)
               }
             />
           </div>
@@ -137,8 +128,8 @@ export function CreateTransactionDialog({
               <Input
                 id='date'
                 type='date'
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={date ? date.toISOString().split('T')[0] : ''}
+                onChange={(e) => setDate(new Date(e.target.value) || null)}
               />
             </div>
 

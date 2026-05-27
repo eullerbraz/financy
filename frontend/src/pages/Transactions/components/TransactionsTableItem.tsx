@@ -1,17 +1,51 @@
 import { Button } from '@/components/ui/button';
 import { CircleArrowDown, CircleArrowUp, SquarePen, Trash } from 'lucide-react';
-import { colorsMap, type Transaction } from '..';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
+import { IconsMap, TransactionType, type Transaction } from '../../../types';
 import { formatAmount } from '../../../utils/format-amount';
+
+const colorsMap = {
+  blue: {
+    bg: 'bg-blue-light',
+    text: 'text-blue',
+    textDark: 'text-blue-dark',
+  },
+  purple: {
+    bg: 'bg-purple-light',
+    text: 'text-purple',
+    textDark: 'text-purple-dark',
+  },
+  orange: {
+    bg: 'bg-orange-light',
+    text: 'text-orange',
+    textDark: 'text-orange-dark',
+  },
+  pink: {
+    bg: 'bg-pink-light',
+    text: 'text-pink',
+    textDark: 'text-pink-dark',
+  },
+  yellow: {
+    bg: 'bg-yellow-light',
+    text: 'text-yellow',
+    textDark: 'text-yellow-dark',
+  },
+  green: {
+    bg: 'bg-green-light',
+    text: 'text-green',
+    textDark: 'text-green-dark',
+  },
+} as const;
 
 export function TransactionsTableItem({
   transaction,
 }: {
   transaction: Transaction;
 }) {
-  const Icon = transaction.icon;
-  const color = colorsMap[transaction.category.color];
+  const Icon = IconsMap[transaction.category.icon as keyof typeof IconsMap];
+
+  const color = colorsMap[transaction.category.color as keyof typeof colorsMap];
 
   return (
     <div className='flex px-6 py-4 border-t border-gray-200'>
@@ -19,14 +53,18 @@ export function TransactionsTableItem({
         <CategoryLogo bgColor={color.bg} textColor={color.text} icon={Icon} />
 
         <span className='truncate text-base font-medium text-gray-800'>
-          {transaction.title}
+          {transaction.description}
         </span>
       </div>
 
       <div className='flex items-center gap-1'>
         <div className='min-w-28 flex items-center justify-center'>
           <span className='text-sm font-normal text-gray-600'>
-            {transaction.date}
+            {transaction.date.toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+            })}
           </span>
         </div>
 
@@ -39,7 +77,7 @@ export function TransactionsTableItem({
         </div>
 
         <div className='min-w-32 flex items-center justify-center gap-2 text-sm font-medium'>
-          {transaction.tone === 'inflow' ? (
+          {transaction.type === TransactionType.inflow ? (
             <>
               <CircleArrowUp className='size-4 text-green' />
               <span className='text-green-dark'>Entrada</span>

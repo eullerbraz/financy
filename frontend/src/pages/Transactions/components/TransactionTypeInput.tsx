@@ -1,15 +1,12 @@
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '../../../components/ui/radio-group';
-import {
-  TransactionTypeEnum,
-  type TransactionType,
-} from './CreateTransactionDialog';
+import { TransactionType } from '../../../types';
 
 export function TransactionTypeOutflow() {
   return (
     <RadioGroupItem
-      value={TransactionTypeEnum.OUTFLOW}
-      id={TransactionTypeEnum.OUTFLOW}
+      value={TransactionType.outflow}
+      id={TransactionType.outflow}
       className='flex flex-1 gap-3 h-12 p-1 cursor-pointer items-center justify-center border-0 rounded-lg bg-white text-gray-500 text-base font-normal transition-all hover:bg-gray-200 data-[state=checked]:font-medium data-[state=checked]:text-red data-[state=checked]:border data-[state=checked]:border-red'
     >
       <ArrowDownCircle className='size-4' />
@@ -22,8 +19,8 @@ export function TransactionTypeOutflow() {
 export function TransactionTypeInflow() {
   return (
     <RadioGroupItem
-      value={TransactionTypeEnum.INFLOW}
-      id={TransactionTypeEnum.INFLOW}
+      value={TransactionType.inflow}
+      id={TransactionType.inflow}
       className='flex flex-1 gap-3 h-12 p-1 cursor-pointer items-center justify-center border-0 rounded-lg bg-white text-gray-500 text-base font-normal transition-all hover:bg-gray-200 data-[state=checked]:font-medium data-[state=checked]:text-green data-[state=checked]:border data-[state=checked]:border-green'
     >
       <ArrowUpCircle className='size-4' />
@@ -45,7 +42,9 @@ export function TransactionTypeInput({
       value={value}
       onValueChange={(value) => {
         const selectedType =
-          value === 'inflow' || value === 'outflow' ? value : null;
+          value === TransactionType.inflow || value === TransactionType.outflow
+            ? value
+            : null;
 
         onValueChange(selectedType);
       }}

@@ -1,165 +1,144 @@
 import { Button } from '@/components/ui/button';
-import {
-  BriefcaseBusiness,
-  Fuel,
-  Pizza,
-  Plus,
-  ShoppingBasket,
-  ShoppingCart,
-  Ticket,
-  Wallet,
-} from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import {
+  Colors,
+  IconsEnum,
+  TransactionType,
+  type Transaction,
+} from '../../types/index.ts';
 import { CreateTransactionDialog } from './components/CreateTransactionDialog.tsx';
 import { TransactionsFilters } from './components/TransactionsFilters.tsx';
 import { TransactionsTable } from './components/TransactionsTable.tsx';
 
-export type TransactionTone = 'inflow' | 'outflow';
-
-export type Category = {
-  name: string;
-  color: keyof typeof colorsMap;
-};
-
-export type Transaction = {
-  id: string;
-  title: string;
-  date: string;
-  amount: number;
-  tone: TransactionTone;
-  category: Category;
-  icon: typeof Wallet;
-};
-
-export const colorsMap = {
-  blue: {
-    bg: 'bg-blue-light',
-    text: 'text-blue',
-    textDark: 'text-blue-dark',
-  },
-  purple: {
-    bg: 'bg-purple-light',
-    text: 'text-purple',
-    textDark: 'text-purple-dark',
-  },
-  orange: {
-    bg: 'bg-orange-light',
-    text: 'text-orange',
-    textDark: 'text-orange-dark',
-  },
-  pink: {
-    bg: 'bg-pink-light',
-    text: 'text-pink',
-    textDark: 'text-pink-dark',
-  },
-  yellow: {
-    bg: 'bg-yellow-light',
-    text: 'text-yellow',
-    textDark: 'text-yellow-dark',
-  },
-  green: {
-    bg: 'bg-green-light',
-    text: 'text-green',
-    textDark: 'text-green-dark',
-  },
-} as const;
-
 const transactions: Transaction[] = [
   {
     id: 't-1',
-    title: 'Jantar no Restaurante',
-    date: '30/11/25',
+    description: 'Jantar no Restaurante',
+    date: new Date('30/11/25'),
     amount: -89.5,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-1',
+    userId: 'u-1',
     category: {
+      id: 'c-1',
       name: 'Alimentação',
-      color: 'blue',
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    icon: Pizza,
   },
   {
     id: 't-2',
-    title: 'Posto de Gasolina',
-    date: '29/11/25',
+    description: 'Posto de Gasolina',
+    date: new Date('29/11/25'),
     amount: -100,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-2',
+    userId: 'u-1',
     category: {
+      id: 'c-2',
       name: 'Transporte',
-      color: 'purple',
+      color: Colors.purple,
+      icon: IconsEnum.CarFront,
+      userId: 'u-1',
     },
-    icon: Fuel,
   },
   {
     id: 't-3',
-    title: 'Compras no Mercado',
-    date: '28/11/25',
+    description: 'Compras no Mercado',
+    date: new Date('28/11/25'),
     amount: -156.8,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-3',
+    userId: 'u-1',
     category: {
+      id: 'c-3',
       name: 'Mercado',
-      color: 'orange',
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    icon: ShoppingCart,
   },
   {
     id: 't-4',
-    title: 'Retorno de Investimento',
-    date: '26/11/25',
+    description: 'Retorno de Investimento',
+    date: new Date('26/11/25'),
     amount: 340.25,
-    tone: 'inflow',
+    type: TransactionType.inflow,
+    categoryId: 'c-4',
+    userId: 'u-1',
     category: {
+      id: 'c-4',
       name: 'Investimento',
-      color: 'green',
+      color: Colors.green,
+      icon: IconsEnum.PiggyBank,
+      userId: 'u-1',
     },
-    icon: Wallet,
   },
   {
     id: 't-5',
-    title: 'Aluguel',
-    date: '26/11/25',
+    description: 'Aluguel',
+    date: new Date('26/11/25'),
     amount: -1700,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-5',
+    userId: 'u-1',
     category: {
+      id: 'c-5',
       name: 'Utilidades',
-      color: 'yellow',
+      color: Colors.yellow,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    icon: ShoppingBasket,
   },
   {
     id: 't-6',
-    title: 'Freelance',
-    date: '24/11/25',
+    description: 'Freelance',
+    date: new Date('24/11/25'),
     amount: 2500,
-    tone: 'inflow',
+    type: TransactionType.inflow,
+    categoryId: 'c-6',
+    userId: 'u-1',
     category: {
+      id: 'c-6',
       name: 'Salario',
-      color: 'green',
+      color: Colors.green,
+      icon: IconsEnum.BriefcaseBusiness,
+      userId: 'u-1',
     },
-    icon: BriefcaseBusiness,
   },
   {
     id: 't-7',
-    title: 'Compras Jantar',
-    date: '22/11/25',
+    description: 'Compras Jantar',
+    date: new Date('22/11/25'),
     amount: -150,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-7',
+    userId: 'u-1',
     category: {
+      id: 'c-7',
       name: 'Mercado',
-      color: 'orange',
+      color: Colors.orange,
+      icon: IconsEnum.ShoppingCart,
+      userId: 'u-1',
     },
-    icon: ShoppingCart,
   },
   {
     id: 't-8',
-    title: 'Cinema',
-    date: '18/11/25',
+    description: 'Cinema',
+    date: new Date('18/11/25'),
     amount: -88,
-    tone: 'outflow',
+    type: TransactionType.outflow,
+    categoryId: 'c-8',
+    userId: 'u-1',
     category: {
+      id: 'c-8',
       name: 'Entretenimento',
-      color: 'pink',
+      color: Colors.pink,
+      icon: IconsEnum.Ticket,
+      userId: 'u-1',
     },
-    icon: Ticket,
   },
 ];
 
