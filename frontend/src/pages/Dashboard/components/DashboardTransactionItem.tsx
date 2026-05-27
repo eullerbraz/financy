@@ -40,6 +40,11 @@ const colorsMap: Record<
     text: 'text-green',
     textDark: 'text-green-dark',
   },
+  red: {
+    bg: 'bg-red-light',
+    text: 'text-red',
+    textDark: 'text-red-dark',
+  },
 };
 
 export function DashboardTransactionItem({

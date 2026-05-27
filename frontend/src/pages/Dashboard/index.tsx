@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useQuery } from '@apollo/client/react';
 import {
   ChevronRight,
   CircleArrowDown,
@@ -15,13 +16,9 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Colors,
-  IconsEnum,
-  TransactionType,
-  type Category,
-  type Transaction,
-} from '../../types';
+import { LIST_CATEGORIES } from '../../lib/graphql/queries/Category';
+import { LIST_TRANSACTIONS } from '../../lib/graphql/queries/Transaction';
+import { Colors } from '../../types';
 import { CreateTransactionDialog } from '../Transactions/components/CreateTransactionDialog';
 import { DashboardCategoryItem } from './components/DashboardCategoryItem';
 import { DashboardMetricCard } from './components/DashboardMetricCard';
@@ -55,222 +52,23 @@ const metrics: DashboardMetric[] = [
   },
 ];
 
-const recentTransactions: Transaction[] = [
-  {
-    id: 't-1',
-    description: 'Jantar no Restaurante',
-    date: new Date('2025-11-30T19:30:00.000Z'),
-    amount: -89.5,
-    type: TransactionType.outflow,
-    categoryId: 'c-1',
-    userId: 'u-1',
-    category: {
-      id: 'c-1',
-      name: 'Alimentação',
-      color: Colors.orange,
-      icon: IconsEnum.ShoppingCart,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-2',
-    description: 'Posto de Gasolina',
-    date: new Date('2025-11-29T19:30:00.000Z'),
-    amount: -100,
-    type: TransactionType.outflow,
-    categoryId: 'c-2',
-    userId: 'u-1',
-    category: {
-      id: 'c-2',
-      name: 'Transporte',
-      color: Colors.purple,
-      icon: IconsEnum.CarFront,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-3',
-    description: 'Compras no Mercado',
-    date: new Date('2025-11-28T19:30:00.000Z'),
-    amount: -156.8,
-    type: TransactionType.outflow,
-    categoryId: 'c-3',
-    userId: 'u-1',
-    category: {
-      id: 'c-3',
-      name: 'Mercado',
-      color: Colors.orange,
-      icon: IconsEnum.ShoppingCart,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-4',
-    description: 'Retorno de Investimento',
-    date: new Date('2025-11-26T19:30:00.000Z'),
-    amount: 340.25,
-    type: TransactionType.inflow,
-    categoryId: 'c-4',
-    userId: 'u-1',
-    category: {
-      id: 'c-4',
-      name: 'Investimento',
-      color: Colors.green,
-      icon: IconsEnum.PiggyBank,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-5',
-    description: 'Aluguel',
-    date: new Date('2025-11-26T19:30:00.000Z'),
-    amount: -1700,
-    type: TransactionType.outflow,
-    categoryId: 'c-5',
-    userId: 'u-1',
-    category: {
-      id: 'c-5',
-      name: 'Utilidades',
-      color: Colors.yellow,
-      icon: IconsEnum.ShoppingCart,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-6',
-    description: 'Freelance',
-    date: new Date('2025-11-24T19:30:00.000Z'),
-    amount: 2500,
-    type: TransactionType.inflow,
-    categoryId: 'c-6',
-    userId: 'u-1',
-    category: {
-      id: 'c-6',
-      name: 'Salario',
-      color: Colors.green,
-      icon: IconsEnum.BriefcaseBusiness,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-7',
-    description: 'Compras Jantar',
-    date: new Date('2025-11-22T19:30:00.000Z'),
-    amount: -150,
-    type: TransactionType.outflow,
-    categoryId: 'c-7',
-    userId: 'u-1',
-    category: {
-      id: 'c-7',
-      name: 'Mercado',
-      color: Colors.orange,
-      icon: IconsEnum.ShoppingCart,
-      userId: 'u-1',
-    },
-  },
-  {
-    id: 't-8',
-    description: 'Cinema',
-    date: new Date('2025-11-18T19:30:00.000Z'),
-    amount: -88,
-    type: TransactionType.outflow,
-    categoryId: 'c-8',
-    userId: 'u-1',
-    category: {
-      id: 'c-8',
-      name: 'Entretenimento',
-      color: Colors.pink,
-      icon: IconsEnum.Ticket,
-      userId: 'u-1',
-    },
-  },
-];
-
-const categories: Category[] = [
-  {
-    id: 'c-1',
-    name: 'Alimentação',
-    description: 'Restaurantes, delivery e refeições',
-    userId: 'u-1',
-    countTransactions: 12,
-    transactionAmount: 542.3,
-    color: Colors.blue,
-    icon: IconsEnum.Utensils,
-  },
-  {
-    id: 'c-2',
-    name: 'Entretenimento',
-    description: 'Cinema, jogos e lazer',
-    userId: 'u-1',
-    countTransactions: 2,
-    transactionAmount: 186.2,
-    color: Colors.pink,
-    icon: IconsEnum.Ticket,
-  },
-  {
-    id: 'c-3',
-    name: 'Investimento',
-    description: 'Aplicações e retornos financeiros',
-    userId: 'u-1',
-    countTransactions: 1,
-    transactionAmount: 340.25,
-    color: Colors.green,
-    icon: IconsEnum.PiggyBank,
-  },
-  {
-    id: 'c-4',
-    name: 'Mercado',
-    description: 'Compras de supermercado e mantimentos',
-    userId: 'u-1',
-    countTransactions: 3,
-    transactionAmount: 298.75,
-    color: Colors.orange,
-    icon: IconsEnum.ShoppingCart,
-  },
-  {
-    id: 'c-5',
-    name: 'Salário',
-    description: 'Renda mensal e bonificações',
-    userId: 'u-1',
-    countTransactions: 3,
-    transactionAmount: 6750,
-    color: Colors.green,
-    icon: IconsEnum.BriefcaseBusiness,
-  },
-  {
-    id: 'c-6',
-    name: 'Saúde',
-    description: 'Medicamentos, consultas e exames',
-    userId: 'u-1',
-    countTransactions: 0,
-    transactionAmount: 0,
-    color: Colors.pink,
-    icon: IconsEnum.HeartPulse,
-  },
-  {
-    id: 'c-7',
-    name: 'Transporte',
-    description: 'Gasolina, transporte público e viagens',
-    userId: 'u-1',
-    countTransactions: 8,
-    transactionAmount: 385.5,
-    color: Colors.purple,
-    icon: IconsEnum.CarFront,
-  },
-  {
-    id: 'c-8',
-    name: 'Utilidades',
-    description: 'Energia, água, internet e telefone',
-    userId: 'u-1',
-    countTransactions: 7,
-    transactionAmount: 245.8,
-    color: Colors.yellow,
-    icon: IconsEnum.ToolCase,
-  },
-];
-
 export function Dashboard() {
+  const { data: transactionsData, refetch: refetchTransactions } =
+    useQuery(LIST_TRANSACTIONS);
+
+  const transactions = transactionsData?.getAllTransactionsByUserId || [];
+
+  const { data: categoriesData, refetch: refetchCategories } =
+    useQuery(LIST_CATEGORIES);
+
+  const categories = categoriesData?.getAllCategoriesByUserId || [];
+
   const [openCreateDialog, setCreateOpenDialog] = useState(false);
+
+  const refetch = () => {
+    refetchTransactions();
+    refetchCategories();
+  };
 
   return (
     <>
@@ -300,7 +98,7 @@ export function Dashboard() {
               </CardAction>
             </CardHeader>
             <CardContent className='p-0'>
-              {recentTransactions.map((transaction) => (
+              {transactions.map((transaction) => (
                 <DashboardTransactionItem
                   key={transaction.id}
                   transaction={transaction}
@@ -352,7 +150,7 @@ export function Dashboard() {
       <CreateTransactionDialog
         open={openCreateDialog}
         onOpenChange={setCreateOpenDialog}
-        onCreated={() => console.log('Transação criada')}
+        onCreated={refetch}
       />
     </>
   );
