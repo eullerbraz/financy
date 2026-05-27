@@ -1,5 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { useQuery } from '@apollo/client/react';
 import { Search } from 'lucide-react';
+import { useState } from 'react';
 import {
   InputGroup,
   InputGroupAddon,
@@ -14,8 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../components/ui/select';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
 
 export function TransactionsFilters() {
+  const [search, setSearch] = useState('');
+  const [categoryId, setCategoryId] = useState<string>('all');
+
+  const { data } = useQuery(LIST_CATEGORIES);
+
+  const categories = data?.getAllCategoriesByUserId || [];
+
   return (
     <Card className='border border-gray-200 p-0'>
       <CardContent className='flex gap-4 p-6 justify-stretch'>
@@ -35,8 +45,8 @@ export function TransactionsFilters() {
               id='search'
               type='text'
               placeholder='Buscar por descricao'
-              value={''}
-              onChange={(e) => console.log(e.target.value)}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               required
             />
           </InputGroup>
@@ -71,17 +81,22 @@ export function TransactionsFilters() {
             Categoria
           </Label>
 
-          <Select defaultValue='all'>
+          <Select
+            defaultValue='all'
+            onValueChange={(value) => setCategoryId(value)}
+            value={categoryId}
+          >
             <SelectTrigger id='category' className='w-full'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectItem value='all'>Todas</SelectItem>
-                <SelectItem value='food'>Alimentacao</SelectItem>
-                <SelectItem value='transport'>Transporte</SelectItem>
-                <SelectItem value='market'>Mercado</SelectItem>
-                <SelectItem value='investiment'>Investimento</SelectItem>
+                {categories.map((c: any) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

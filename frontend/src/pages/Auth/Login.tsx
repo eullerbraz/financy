@@ -44,8 +44,6 @@ export function Login() {
         toast.success('Login realizado com sucesso!');
       }
     } catch (error) {
-      console.log(error);
-
       toast.success('Falha ao realizar o login!');
     } finally {
       setLoading(false);
