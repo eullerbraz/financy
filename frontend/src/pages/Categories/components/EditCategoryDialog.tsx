@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -9,25 +9,36 @@ import {
 } from '../../../components/ui/dialog';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
-import { Colors, IconsEnum } from '../../../types';
+import { Colors, IconsEnum, type Category } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
 
-interface CreateCategoryDialogProps {
+interface EditCategoryDialogProps {
+  category: Category;
   open: boolean;
   onOpenChange: (oepn: boolean) => void;
-  onCreated?: () => void;
+  onEdited?: (category: Category) => void;
 }
 
-export function CreateCategoryDialog({
+export function EditCategoryDialog({
+  category,
   open,
   onOpenChange,
-  onCreated,
-}: CreateCategoryDialogProps) {
-  const [title, setTitle] = useState('');
+  onEdited,
+}: EditCategoryDialogProps) {
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [icon, setIcon] = useState<IconsEnum | null>(null);
   const [color, setColor] = useState<Colors | null>(null);
+
+  useEffect(() => {
+    if (open) {
+      setName(category.name);
+      setDescription(category.description || '');
+      setIcon(category.icon);
+      setColor(category.color);
+    }
+  }, [category, open]);
 
   const loading = false; // TODO: loading state from mutation
 
@@ -35,7 +46,7 @@ export function CreateCategoryDialog({
   //   onCompleted() {
   //     toast.success('Category criada com sucesso');
   //     onOpenChange(false);
-  //     onCreated?.();
+  //     onEdited?.();
   //   },
   //   onError() {
   //     toast.error('Falha ao criar a ideia');
@@ -45,11 +56,17 @@ export function CreateCategoryDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    onCreated?.();
+    onEdited?.({
+      ...category,
+      name,
+      description,
+      icon: icon || category.icon,
+      color: color || category.color,
+    });
   };
 
   const clear = () => {
-    setTitle('');
+    setName('');
     setDescription('');
     setIcon(null);
     setColor(null);
@@ -68,7 +85,7 @@ export function CreateCategoryDialog({
       <DialogContent className='gap-6 max-w-md'>
         <DialogHeader className='flex flex-col items-start gap-0.5'>
           <DialogTitle className='text-base font-semibold text-gray-800'>
-            Nova categoria
+            Editar categoria
           </DialogTitle>
           <DialogDescription className='text-sm font-normal text-gray-600'>
             Organize suas transações com categorias
@@ -86,8 +103,8 @@ export function CreateCategoryDialog({
             <Input
               id='title'
               placeholder='Ex. Alimentação'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>

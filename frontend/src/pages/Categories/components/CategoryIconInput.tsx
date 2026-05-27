@@ -22,14 +22,17 @@ export function CategoryIcon({
 }
 
 export function CategoryIconInput({
+  value,
   icons,
   onValueChange,
 }: {
+  value: IconsEnum | null;
   icons: IconsEnum[];
   onValueChange: (value: IconsEnum | null) => void;
 }) {
   return (
     <RadioGroup
+      value={value}
       onValueChange={(value) => {
         const selectedIcon = icons.find((icon) => icon === value) || null;
 

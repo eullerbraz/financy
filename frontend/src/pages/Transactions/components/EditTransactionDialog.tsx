@@ -40,12 +40,14 @@ export function EditTransactionDialog({
   const [category, setCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    setType(transaction.type);
-    setDescription(transaction.description);
-    setDate(transaction.date);
-    setAmount(transaction.amount);
-    setCategory(transaction.categoryId);
-  }, [transaction]);
+    if (open) {
+      setType(transaction.type);
+      setDescription(transaction.description);
+      setDate(transaction.date);
+      setAmount(transaction.amount);
+      setCategory(transaction.categoryId);
+    }
+  }, [transaction, open]);
 
   const loading = false; // TODO: loading state from mutation
 
@@ -101,10 +103,10 @@ export function EditTransactionDialog({
       <DialogContent className='gap-6 max-w-md'>
         <DialogHeader className='flex flex-col items-start gap-0.5'>
           <DialogTitle className='text-base font-semibold text-gray-800'>
-            Nova transação
+            Editar transação
           </DialogTitle>
           <DialogDescription className='text-sm font-normal text-gray-600'>
-            Registre sua despesa ou receita
+            Edite sua despesa ou receita
           </DialogDescription>
         </DialogHeader>
 

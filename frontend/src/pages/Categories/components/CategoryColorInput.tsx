@@ -1,6 +1,16 @@
 import { RadioGroup, RadioGroupItem } from '../../../components/ui/radio-group';
 import { cn } from '../../../lib/utils';
-import type { Color } from './CreateCategoryDialog';
+import type { Colors } from '../../../types';
+
+const colorsMap = {
+  green: 'bg-green',
+  blue: 'bg-blue',
+  purple: 'bg-purple',
+  pink: 'bg-pink',
+  red: 'bg-red',
+  orange: 'bg-orange',
+  yellow: 'bg-yellow',
+} as const;
 
 export function CategoryColor({
   color,
@@ -21,24 +31,26 @@ export function CategoryColor({
 }
 
 export function CategoryColorInput({
+  value,
   colors,
   onValueChange,
 }: {
-  colors: Color[];
-  onValueChange: (value: Color | null) => void;
+  value: Colors | null;
+  colors: Colors[];
+  onValueChange: (value: Colors | null) => void;
 }) {
   return (
     <RadioGroup
+      value={value}
       onValueChange={(value) => {
-        const selectedColor =
-          colors.find((color) => color.name === value) || null;
+        const selectedColor = colors.find((color) => color === value) || null;
 
         onValueChange(selectedColor);
       }}
       className='grid grid-cols-7 gap-2 p-0'
     >
       {colors.map((color) => (
-        <CategoryColor key={color.name} color={color.name} bgColor={color.bg} />
+        <CategoryColor key={color} color={color} bgColor={colorsMap[color]} />
       ))}
     </RadioGroup>
   );
