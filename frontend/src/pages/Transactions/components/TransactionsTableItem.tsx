@@ -5,6 +5,7 @@ import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
 import { IconsMap, TransactionType, type Transaction } from '../../../types';
 import { formatAmount } from '../../../utils/format-amount';
+import { DeleteTransactionDialog } from './DeleteTransactionDialog';
 import { EditTransactionDialog } from './EditTransactionDialog';
 
 const colorsMap = {
@@ -46,6 +47,7 @@ export function TransactionsTableItem({
   transaction: Transaction;
 }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const Icon = IconsMap[transaction.category.icon as keyof typeof IconsMap];
 
@@ -99,17 +101,18 @@ export function TransactionsTableItem({
             <Button
               size='icon'
               variant='outline'
-              className='border-gray-300 text-red'
-            >
-              <Trash className='size-4 text-feedback-danger' />
-            </Button>
-            <Button
-              size='icon'
-              variant='outline'
               className='border-gray-300 text-gray-600'
               onClick={() => setOpenEditDialog(true)}
             >
               <SquarePen className='size-4 text-gray-700' />
+            </Button>
+            <Button
+              size='icon'
+              variant='outline'
+              className='border-gray-300 text-red'
+              onClick={() => setOpenDeleteDialog(true)}
+            >
+              <Trash className='size-4 text-feedback-danger' />
             </Button>
           </div>
         </div>
@@ -120,6 +123,13 @@ export function TransactionsTableItem({
         open={openEditDialog}
         onOpenChange={setOpenEditDialog}
         onEdited={(transaction) => console.log(transaction)}
+      />
+
+      <DeleteTransactionDialog
+        transaction={transaction}
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onDeleted={(transactionId) => console.log(transactionId)}
       />
     </>
   );
