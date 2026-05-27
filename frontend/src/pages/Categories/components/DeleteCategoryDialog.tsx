@@ -1,3 +1,5 @@
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -7,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../../components/ui/dialog';
+import { DELETE_CATEGORY } from '../../../lib/graphql/mutations/Category';
 import type { Category } from '../../../types';
 
 interface DeleteCategoryDialogProps {
@@ -22,12 +25,27 @@ export function DeleteCategoryDialog({
   category,
   onDeleted,
 }: DeleteCategoryDialogProps) {
-  const loading = false; // TODO: loading state from mutation
+  const [deleteCategoryById, { loading }] = useMutation(DELETE_CATEGORY, {
+    onCompleted() {
+      toast.success('Categoria removida com sucesso');
 
-  const handledeleteCategory = async () => {
+      onOpenChange(false);
+
+      onDeleted?.();
+    },
+    onError() {
+      toast.error('Falha ao remover a categoria');
+    },
+  });
+
+  const handleDeleteCategory = async () => {
     if (!category) return;
 
-    onDeleted();
+    await deleteCategoryById({
+      variables: {
+        deleteCategoryByIdId: category.id,
+      },
+    });
   };
 
   return (
@@ -55,7 +73,7 @@ export function DeleteCategoryDialog({
           <Button
             className='bg-red text-white hover:bg-red-dark'
             variant='destructive'
-            onClick={handledeleteCategory}
+            onClick={handleDeleteCategory}
             disabled={loading}
           >
             Remover
