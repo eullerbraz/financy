@@ -59,7 +59,7 @@ export function Transactions() {
           <TransactionsTable
             transactions={transactions}
             onEditTransaction={handleEditTransaction}
-            onDeletedTransaction={handleDeleteTransaction}
+            onDeleteTransaction={handleDeleteTransaction}
           />
         )}
       </div>

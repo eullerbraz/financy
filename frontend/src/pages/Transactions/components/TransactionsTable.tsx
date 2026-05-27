@@ -13,11 +13,11 @@ import { TransactionsTableItem } from './TransactionsTableItem.tsx';
 export function TransactionsTable({
   transactions,
   onEditTransaction,
-  onDeletedTransaction,
+  onDeleteTransaction,
 }: {
   transactions: Transaction[];
   onEditTransaction: (transaction: Transaction) => void;
-  onDeletedTransaction: (transaction: Transaction) => void;
+  onDeleteTransaction: (transaction: Transaction) => void;
 }) {
   return (
     <Card className='gap-0 overflow-hidden border border-gray-200 p-0'>
@@ -53,7 +53,7 @@ export function TransactionsTable({
             key={transaction.id}
             transaction={transaction}
             onEdit={() => onEditTransaction(transaction)}
-            onDeleted={() => onDeletedTransaction(transaction)}
+            onDelete={() => onDeleteTransaction(transaction)}
           />
         ))}
       </CardContent>

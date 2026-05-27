@@ -47,11 +47,11 @@ const colorsMap = {
 export function TransactionsTableItem({
   transaction,
   onEdit,
-  onDeleted,
+  onDelete,
 }: {
   transaction: Transaction;
   onEdit: () => void;
-  onDeleted: () => void;
+  onDelete: () => void;
 }) {
   const Icon = IconsMap[transaction.category.icon as keyof typeof IconsMap];
 
@@ -109,7 +109,7 @@ export function TransactionsTableItem({
             size='icon'
             variant='outline'
             className='border-gray-300 text-red'
-            onClick={onDeleted}
+            onClick={onDelete}
           >
             <Trash className='size-4 text-feedback-danger' />
           </Button>
