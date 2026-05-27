@@ -3,7 +3,10 @@ import { useQuery } from '@apollo/client/react';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { LIST_TRANSACTIONS } from '../../lib/graphql/queries/Transaction.ts';
+import type { Transaction } from '../../types/index.ts';
 import { CreateTransactionDialog } from './components/CreateTransactionDialog.tsx';
+import { DeleteTransactionDialog } from './components/DeleteTransactionDialog.tsx';
+import { EditTransactionDialog } from './components/EditTransactionDialog.tsx';
 import { TransactionsFilters } from './components/TransactionsFilters.tsx';
 import { TransactionsTable } from './components/TransactionsTable.tsx';
 import { TransactionsTableSkeleton } from './components/TransactionsTableSkeleton.tsx';
@@ -14,6 +17,20 @@ export function Transactions() {
   const transactions = data?.getAllTransactionsByUserId || [];
 
   const [openCreateDialog, setCreateOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
+
+  const handleEditTransaction = (transaction: Transaction) => {
+    setTransaction(transaction);
+    setOpenEditDialog(true);
+  };
+
+  const handleDeleteTransaction = (transaction: Transaction) => {
+    setTransaction(transaction);
+
+    setOpenDeleteDialog(true);
+  };
 
   return (
     <>
@@ -41,9 +58,8 @@ export function Transactions() {
         ) : (
           <TransactionsTable
             transactions={transactions}
-            onEditTransaction={(transaction) =>
-              console.log('Editar transação', transaction)
-            }
+            onEditTransaction={handleEditTransaction}
+            onDeletedTransaction={handleDeleteTransaction}
           />
         )}
       </div>
@@ -52,6 +68,20 @@ export function Transactions() {
         open={openCreateDialog}
         onOpenChange={setCreateOpenDialog}
         onCreated={refetch}
+      />
+
+      <EditTransactionDialog
+        transaction={transaction}
+        open={openEditDialog}
+        onOpenChange={setOpenEditDialog}
+        onEdited={refetch}
+      />
+
+      <DeleteTransactionDialog
+        transaction={transaction}
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onDeleted={refetch}
       />
     </>
   );

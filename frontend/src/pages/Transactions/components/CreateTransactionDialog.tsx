@@ -37,7 +37,7 @@ export function CreateTransactionDialog({
 }: CreateTransactionDialogProps) {
   const [type, setType] = useState<TransactionType>(TransactionType.outflow);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState('');
   const [amount, setAmount] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState<string>('');
 
@@ -66,7 +66,7 @@ export function CreateTransactionDialog({
         data: {
           type,
           description,
-          date: date?.toISOString(),
+          date: new Date(date).toISOString(),
           amount,
           categoryId,
         },
@@ -77,7 +77,7 @@ export function CreateTransactionDialog({
   const clear = () => {
     setType(TransactionType.outflow);
     setDescription('');
-    setDate(null);
+    setDate('');
     setAmount(0);
     setCategoryId('');
   };
@@ -140,8 +140,10 @@ export function CreateTransactionDialog({
               <Input
                 id='date'
                 type='date'
-                value={date ? date.toISOString().split('T')[0] : ''}
-                onChange={(e) => setDate(new Date(e.target.value) || null)}
+                value={date.split('T')[0] || ''}
+                onChange={(e) =>
+                  setDate(new Date(e.target.value).toISOString() || '')
+                }
               />
             </div>
 

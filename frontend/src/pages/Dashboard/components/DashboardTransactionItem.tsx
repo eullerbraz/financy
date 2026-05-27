@@ -4,6 +4,7 @@ import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
 import { IconsMap, TransactionType, type Transaction } from '../../../types';
 import { formatAmount } from '../../../utils/format-amount';
+import { formatDate } from '../../../utils/formatDate';
 
 const colorsMap: Record<
   string,
@@ -66,11 +67,7 @@ export function DashboardTransactionItem({
             {transaction.description}
           </p>
           <p className='text-sm font-normal text-gray-600'>
-            {transaction.date.toLocaleDateString('pt-BR', {
-              day: '2-digit',
-              month: '2-digit',
-              year: '2-digit',
-            })}
+            {formatDate(new Date(transaction.date))}
           </p>
         </div>
       </div>

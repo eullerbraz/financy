@@ -10,10 +10,10 @@ import {
 import type { Transaction } from '../../../types';
 
 interface DeleteTransactionDialogProps {
-  transaction: Transaction;
+  transaction: Transaction | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDeleted: (transactionId: string) => void;
+  onDeleted: () => void;
 }
 
 export function DeleteTransactionDialog({
@@ -24,10 +24,10 @@ export function DeleteTransactionDialog({
 }: DeleteTransactionDialogProps) {
   const loading = false; // TODO: loading state from mutation
 
-  const handledeleteTransaction = async () => {
+  const handleDeleteTransaction = async () => {
     if (!transaction) return;
 
-    onDeleted(transaction.id);
+    onDeleted();
   };
 
   return (
@@ -39,7 +39,7 @@ export function DeleteTransactionDialog({
           </DialogTitle>
           <DialogDescription className='text-sm font-normal text-gray-600'>
             <span>Tem certeza que deseja remover a transação </span>
-            <span className='font-semibold'> {transaction.description}</span>
+            <span className='font-semibold'> {transaction?.description}</span>
             <span>? Essa ação não poderá ser desfeita.</span>
           </DialogDescription>
         </DialogHeader>
@@ -55,7 +55,7 @@ export function DeleteTransactionDialog({
           <Button
             className='bg-red text-white hover:bg-red-dark'
             variant='destructive'
-            onClick={handledeleteTransaction}
+            onClick={handleDeleteTransaction}
             disabled={loading}
           >
             Remover

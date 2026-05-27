@@ -1,4 +1,6 @@
+import { useMutation, useQuery } from '@apollo/client/react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -17,14 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../components/ui/select';
+import { UPDATE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
 import { TransactionType, type Transaction } from '../../../types';
 import { TransactionTypeInput } from './TransactionTypeInput';
 
 interface EditTransactionDialogProps {
-  transaction: Transaction;
+  transaction: Transaction | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onEdited?: (transaction: Transaction) => void;
+  onEdited?: () => void;
 }
 
 export function EditTransactionDialog({
@@ -35,59 +39,64 @@ export function EditTransactionDialog({
 }: EditTransactionDialogProps) {
   const [type, setType] = useState<TransactionType>(TransactionType.outflow);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState('');
   const [amount, setAmount] = useState<number | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
+  const [categoryId, setCategoryId] = useState<string>('');
 
   useEffect(() => {
     if (open) {
+      if (!transaction) return;
+
       setType(transaction.type);
       setDescription(transaction.description);
       setDate(transaction.date);
       setAmount(transaction.amount);
-      setCategory(transaction.categoryId);
+      setCategoryId(transaction.categoryId);
     }
   }, [transaction, open]);
 
-  const loading = false; // TODO: loading state from mutation
+  const { data } = useQuery(LIST_CATEGORIES);
 
-  // const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
-  //   onCompleted() {
-  //     toast.success('Category criada com sucesso');
-  //     onOpenChange(false);
-  // onEdited?.({
-  //   ...transaction,
-  //   type,
-  //   description,
-  //   date: date || transaction.date,
-  //   amount: amount ?? transaction.amount,
-  //   categoryId: category || transaction.categoryId,
-  // });
-  //   },
-  //   onError() {
-  //     toast.error('Falha ao criar a ideia');
-  //   },
-  // });
+  const categories = data?.getAllCategoriesByUserId || [];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [updateTransactionById, { loading }] = useMutation(UPDATE_TRANSACTION, {
+    onCompleted() {
+      toast.success('Transaction atualizada com sucesso');
+
+      handleOpenChange(false);
+
+      onEdited?.();
+    },
+    onError() {
+      toast.error('Falha ao atualizar a transação');
+    },
+  });
+
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    onEdited?.({
-      ...transaction,
-      type,
-      description,
-      date: date || transaction.date,
-      amount: amount ?? transaction.amount,
-      categoryId: category || transaction.categoryId,
+    if (!transaction) return;
+
+    updateTransactionById({
+      variables: {
+        updateTransactionByIdId: transaction.id,
+        data: {
+          type,
+          description,
+          date: new Date(date).toISOString(),
+          amount: amount ?? transaction.amount,
+          categoryId: categoryId || transaction.categoryId,
+        },
+      },
     });
   };
 
   const clear = () => {
     setType(TransactionType.outflow);
     setDescription('');
-    setDate(null);
+    setDate('');
     setAmount(0);
-    setCategory(null);
+    setCategoryId('');
   };
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -97,6 +106,8 @@ export function EditTransactionDialog({
 
     onOpenChange(isOpen);
   };
+
+  const isSubmitDisabled = !description || !date || !amount || !categoryId;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -146,8 +157,10 @@ export function EditTransactionDialog({
               <Input
                 id='date'
                 type='date'
-                value={date ? date.toISOString().split('T')[0] : ''}
-                onChange={(e) => setDate(new Date(e.target.value) || null)}
+                value={date.split('T')[0] || ''}
+                onChange={(e) =>
+                  setDate(new Date(e.target.value).toISOString() || '')
+                }
               />
             </div>
 
@@ -176,17 +189,20 @@ export function EditTransactionDialog({
               Categoria
             </Label>
 
-            <Select defaultValue='all'>
+            <Select
+              onValueChange={(value) => setCategoryId(value)}
+              value={categoryId}
+            >
               <SelectTrigger id='category' className='w-full'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value='all'>Todas</SelectItem>
-                  <SelectItem value='food'>Alimentacao</SelectItem>
-                  <SelectItem value='transport'>Transporte</SelectItem>
-                  <SelectItem value='market'>Mercado</SelectItem>
-                  <SelectItem value='investiment'>Investimento</SelectItem>
+                  {categories.map((c: any) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -196,7 +212,7 @@ export function EditTransactionDialog({
             <Button
               className='w-full hover:bg-brand-dark'
               type='submit'
-              disabled={loading}
+              disabled={loading || isSubmitDisabled}
             >
               Salvar
             </Button>
