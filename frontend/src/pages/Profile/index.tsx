@@ -29,7 +29,7 @@ export function Profile() {
     .join('')
     .slice(0, 2);
 
-  const handleSave = async (event: React.FormEvent) => {
+  const handleSave = async (event: React.SubmitEvent) => {
     event.preventDefault();
     setLoading(true);
 

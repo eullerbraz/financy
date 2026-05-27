@@ -53,7 +53,7 @@ export function EditCategoryDialog({
   //   },
   // });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     onEdited?.({

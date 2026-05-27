@@ -29,7 +29,7 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     setLoading(true);

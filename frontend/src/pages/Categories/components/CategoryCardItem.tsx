@@ -44,6 +44,11 @@ const colorsMap = {
     text: 'text-yellow',
     textDark: 'text-yellow-dark',
   },
+  red: {
+    bg: 'bg-red-light',
+    text: 'text-red',
+    textDark: 'text-red-dark',
+  },
 };
 
 export function CategoryCardItem({ category }: { category: Category }) {

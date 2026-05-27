@@ -18,7 +18,7 @@ import { CategoryIconInput } from './CategoryIconInput';
 
 interface CreateCategoryDialogProps {
   open: boolean;
-  onOpenChange: (oepn: boolean) => void;
+  onOpenChange: (open: boolean) => void;
   onCreated?: () => void;
 }
 
@@ -27,31 +27,31 @@ export function CreateCategoryDialog({
   onOpenChange,
   onCreated,
 }: CreateCategoryDialogProps) {
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [icon, setIcon] = useState<IconsEnum | null>(null);
   const [color, setColor] = useState<Colors | null>(null);
 
   const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
     onCompleted() {
-      toast.success('Category criada com sucesso');
+      toast.success('Categoria criada com sucesso');
 
-      onOpenChange(false);
+      handleOpenChange(false);
 
       onCreated?.();
     },
     onError() {
-      toast.error('Falha ao criar a ideia');
+      toast.error('Falha ao criar a categoria');
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     createCategory({
       variables: {
         data: {
-          name: title,
+          name,
           description,
           icon,
           color,
@@ -61,7 +61,7 @@ export function CreateCategoryDialog({
   };
 
   const clear = () => {
-    setTitle('');
+    setName('');
     setDescription('');
     setIcon(null);
     setColor(null);
@@ -97,9 +97,9 @@ export function CreateCategoryDialog({
             </Label>
             <Input
               id='title'
-              placeholder='Ex. Alimentação'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              placeholder='Ex. Almoço no restaurante'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>

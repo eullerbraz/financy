@@ -1,4 +1,6 @@
+import { useMutation, useQuery } from '@apollo/client/react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -17,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../components/ui/select';
+import { CREATE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
 import { TransactionType } from '../../../types';
 import { TransactionTypeInput } from './TransactionTypeInput';
 
@@ -35,33 +39,39 @@ export function CreateTransactionDialog({
   const [description, setDescription] = useState('');
   const [date, setDate] = useState<Date | null>(null);
   const [amount, setAmount] = useState<number | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
+  const [categoryId, setCategoryId] = useState<string>('');
 
-  const loading = false; // TODO: loading state from mutation
+  const { data } = useQuery(LIST_CATEGORIES);
 
-  // const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
-  //   onCompleted() {
-  //     toast.success('Category criada com sucesso');
-  //     onOpenChange(false);
-  //     onCreated?.();
-  //   },
-  //   onError() {
-  //     toast.error('Falha ao criar a ideia');
-  //   },
-  // });
+  const categories = data?.getAllCategoriesByUserId || [];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
+    onCompleted() {
+      toast.success('Transaction criada com sucesso');
+
+      handleOpenChange(false);
+
+      onCreated?.();
+    },
+    onError() {
+      toast.error('Falha ao criar a transação');
+    },
+  });
+
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    console.log({
-      type,
-      description,
-      date,
-      amount,
-      category,
+    createTransaction({
+      variables: {
+        data: {
+          type,
+          description,
+          date: date?.toISOString(),
+          amount,
+          categoryId,
+        },
+      },
     });
-
-    onCreated?.();
   };
 
   const clear = () => {
@@ -69,7 +79,7 @@ export function CreateTransactionDialog({
     setDescription('');
     setDate(null);
     setAmount(0);
-    setCategory(null);
+    setCategoryId('');
   };
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -79,6 +89,8 @@ export function CreateTransactionDialog({
 
     onOpenChange(isOpen);
   };
+
+  const isSubmitDisabled = !description || !date || !amount || !categoryId;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -158,17 +170,20 @@ export function CreateTransactionDialog({
               Categoria
             </Label>
 
-            <Select defaultValue='all'>
+            <Select
+              onValueChange={(value) => setCategoryId(value)}
+              value={categoryId}
+            >
               <SelectTrigger id='category' className='w-full'>
-                <SelectValue />
+                <SelectValue placeholder='Selecione' />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value='all'>Todas</SelectItem>
-                  <SelectItem value='food'>Alimentacao</SelectItem>
-                  <SelectItem value='transport'>Transporte</SelectItem>
-                  <SelectItem value='market'>Mercado</SelectItem>
-                  <SelectItem value='investiment'>Investimento</SelectItem>
+                  {categories.map((c: any) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -178,7 +193,7 @@ export function CreateTransactionDialog({
             <Button
               className='w-full hover:bg-brand-dark'
               type='submit'
-              disabled={loading}
+              disabled={loading || isSubmitDisabled}
             >
               Salvar
             </Button>
