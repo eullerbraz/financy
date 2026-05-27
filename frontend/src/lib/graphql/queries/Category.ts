@@ -17,22 +17,3 @@ export const LIST_CATEGORIES: TypedDocumentNode<{
     }
   }
 `;
-
-export const GET_CATEGORY: TypedDocumentNode<
-  {
-    getCategoryById: Category;
-  },
-  { categoryId: string }
-> = gql`
-  query GetCategoryById($categoryId: String!) {
-    getCategoryById(id: $categoryId) {
-      id
-      name
-      description
-      color
-      icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
