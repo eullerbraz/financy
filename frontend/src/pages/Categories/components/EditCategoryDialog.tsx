@@ -1,4 +1,6 @@
+import { useMutation } from '@apollo/client/react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -9,15 +11,16 @@ import {
 } from '../../../components/ui/dialog';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
+import { UPDATE_CATEGORY } from '../../../lib/graphql/mutations/Category';
 import { Colors, IconsEnum, type Category } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
 
 interface EditCategoryDialogProps {
-  category: Category;
+  category: Category | null;
   open: boolean;
-  onOpenChange: (oepn: boolean) => void;
-  onEdited?: (category: Category) => void;
+  onOpenChange: (open: boolean) => void;
+  onEdited?: () => void;
 }
 
 export function EditCategoryDialog({
@@ -33,6 +36,8 @@ export function EditCategoryDialog({
 
   useEffect(() => {
     if (open) {
+      if (!category) return;
+
       setName(category.name);
       setDescription(category.description || '');
       setIcon(category.icon);
@@ -40,28 +45,34 @@ export function EditCategoryDialog({
     }
   }, [category, open]);
 
-  const loading = false; // TODO: loading state from mutation
+  const [updateCategoryById, { loading }] = useMutation(UPDATE_CATEGORY, {
+    onCompleted() {
+      toast.success('Categoria atualizada com sucesso');
 
-  // const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
-  //   onCompleted() {
-  //     toast.success('Category criada com sucesso');
-  //     onOpenChange(false);
-  //     onEdited?.();
-  //   },
-  //   onError() {
-  //     toast.error('Falha ao criar a ideia');
-  //   },
-  // });
+      handleOpenChange(false);
+
+      onEdited?.();
+    },
+    onError() {
+      toast.error('Falha ao atualizar a categoria');
+    },
+  });
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    onEdited?.({
-      ...category,
-      name,
-      description,
-      icon: icon || category.icon,
-      color: color || category.color,
+    if (!category) return;
+
+    updateCategoryById({
+      variables: {
+        updateCategoryByIdId: category.id,
+        data: {
+          name,
+          description,
+          icon,
+          color,
+        },
+      },
     });
   };
 

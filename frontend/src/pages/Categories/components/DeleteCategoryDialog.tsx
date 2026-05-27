@@ -10,10 +10,10 @@ import {
 import type { Category } from '../../../types';
 
 interface DeleteCategoryDialogProps {
-  category: Category;
+  category: Category | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDeleted: (categoryId: string) => void;
+  onDeleted: () => void;
 }
 
 export function DeleteCategoryDialog({
@@ -27,7 +27,7 @@ export function DeleteCategoryDialog({
   const handledeleteCategory = async () => {
     if (!category) return;
 
-    onDeleted(category.id);
+    onDeleted();
   };
 
   return (
@@ -39,7 +39,7 @@ export function DeleteCategoryDialog({
           </DialogTitle>
           <DialogDescription className='text-sm font-normal text-gray-600'>
             <span>Tem certeza que deseja remover a categoria </span>
-            <span className='font-semibold'> {category.name}</span>
+            <span className='font-semibold'> {category?.name}</span>
             <span>? Essa ação não poderá ser desfeita.</span>
           </DialogDescription>
         </DialogHeader>

@@ -3,16 +3,34 @@ import { useQuery } from '@apollo/client/react';
 import { ArrowUpDown, Plus, Tag, Utensils } from 'lucide-react';
 import { useState } from 'react';
 import { LIST_CATEGORIES } from '../../lib/graphql/queries/Category';
+import type { Category } from '../../types';
 import { CategoryCardItem } from './components/CategoryCardItem';
 import { CategoryMetricCard } from './components/CategoryMetricCard';
 import { CreateCategoryDialog } from './components/CreateCategoryDialog';
+import { DeleteCategoryDialog } from './components/DeleteCategoryDialog';
+import { EditCategoryDialog } from './components/EditCategoryDialog';
 
 export function Categories() {
   const { data, loading, refetch } = useQuery(LIST_CATEGORIES);
 
   const categories = data?.getAllCategoriesByUserId || [];
 
+  const [category, setCategory] = useState<Category | null>(null);
+
   const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const handleEditTransaction = (transaction: Category) => {
+    setCategory(transaction);
+    setOpenEditDialog(true);
+  };
+
+  const handleDeleteCategory = (transaction: Category) => {
+    setCategory(transaction);
+
+    setOpenDeleteDialog(true);
+  };
 
   return (
     <>
@@ -62,7 +80,12 @@ export function Categories() {
                 />
               ))
             : categories.map((category) => (
-                <CategoryCardItem key={category.name} category={category} />
+                <CategoryCardItem
+                  key={category.name}
+                  category={category}
+                  onEdit={() => handleEditTransaction(category)}
+                  onDelete={() => handleDeleteCategory(category)}
+                />
               ))}
         </section>
       </div>
@@ -71,6 +94,20 @@ export function Categories() {
         open={openDialog}
         onOpenChange={setOpenDialog}
         onCreated={refetch}
+      />
+
+      <EditCategoryDialog
+        category={category}
+        open={openEditDialog}
+        onOpenChange={setOpenEditDialog}
+        onEdited={refetch}
+      />
+
+      <DeleteCategoryDialog
+        category={category}
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onDeleted={refetch}
       />
     </>
   );

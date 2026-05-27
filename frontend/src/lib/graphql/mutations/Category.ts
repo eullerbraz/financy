@@ -11,3 +11,18 @@ export const CREATE_CATEGORY = gql`
     }
   }
 `;
+
+export const UPDATE_CATEGORY = gql`
+  mutation UpdateCategoryById(
+    $updateCategoryByIdId: String!
+    $data: UpdateCategoryInput!
+  ) {
+    updateCategoryById(id: $updateCategoryByIdId, data: $data) {
+      id
+      name
+      description
+      color
+      icon
+    }
+  }
+`;
