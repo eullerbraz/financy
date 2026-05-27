@@ -1,13 +1,6 @@
 import { apolloClient } from '@/lib/graphql/apollo';
 import { REGISTER } from '@/lib/graphql/mutations/Register';
-import type {
-  LoginInput,
-  LoginMutationData,
-  RegisterInput,
-  RegisterMutationData,
-  User,
-} from '@/types';
-import type { ApolloClient } from '@apollo/client';
+import type { LoginInput, RegisterInput, User } from '@/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { LOGIN } from '../lib/graphql/mutations/Login';
@@ -29,10 +22,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       login: async (loginData: LoginInput) => {
         try {
-          const options: ApolloClient.MutateOptions<
-            LoginMutationData,
-            { data: LoginInput }
-          > = {
+          const { data } = await apolloClient.mutate({
             mutation: LOGIN,
             variables: {
               data: {
@@ -40,12 +30,7 @@ export const useAuthStore = create<AuthState>()(
                 password: loginData.password,
               },
             },
-          };
-
-          const { data } = await apolloClient.mutate<
-            LoginMutationData,
-            { data: LoginInput }
-          >(options);
+          });
 
           if (data?.login) {
             const { user, token } = data.login;
@@ -73,10 +58,7 @@ export const useAuthStore = create<AuthState>()(
       },
       signup: async (registerData: RegisterInput) => {
         try {
-          const options: ApolloClient.MutateOptions<
-            RegisterMutationData,
-            { data: RegisterInput }
-          > = {
+          const { data } = await apolloClient.mutate({
             mutation: REGISTER,
             variables: {
               data: {
@@ -85,9 +67,7 @@ export const useAuthStore = create<AuthState>()(
                 password: registerData.password,
               },
             },
-          };
-
-          const { data } = await apolloClient.mutate(options);
+          });
 
           if (data?.register) {
             const { token, user } = data.register;
