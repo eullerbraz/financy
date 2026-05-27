@@ -24,7 +24,8 @@
   "contributors": [],
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "migrate": "npx prisma@6.16.2 migrate dev --name"
+    "migrate": "npx prisma@6.16.2 migrate dev --name",
+    "migrate:deploy": "npx prisma@6.16.2 migrate deploy"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
