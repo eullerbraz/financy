@@ -1,16 +1,11 @@
 import logo from '@/assets/logo.svg';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../stores/auth';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 
 export function Header() {
-  const { user, isAuthenticated } = {
-    user: {
-      name: 'Euller Braz',
-      email: 'euller.braz@example.com',
-    },
-    isAuthenticated: true,
-  };
+  const { user, isAuthenticated } = useAuthStore();
 
   const location = useLocation();
 

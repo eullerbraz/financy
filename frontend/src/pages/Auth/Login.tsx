@@ -20,19 +20,18 @@ import {
   InputGroupInput,
 } from '../../components/ui/input-group';
 import { Separator } from '../../components/ui/separator';
+import { useAuthStore } from '../../stores/auth';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const login = (loginInput: any) => {
-    console.log('Login input:', loginInput);
-    return Promise.resolve(true);
-  };
+  const login = useAuthStore((state) => state.login);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setLoading(true);
 
     try {
@@ -40,10 +39,13 @@ export function Login() {
         email,
         password,
       });
+
       if (loginMutate) {
         toast.success('Login realizado com sucesso!');
       }
     } catch (error) {
+      console.log(error);
+
       toast.success('Falha ao realizar o login!');
     } finally {
       setLoading(false);

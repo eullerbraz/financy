@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Separator } from '../../components/ui/separator';
+import { useAuthStore } from '../../stores/auth';
 
 export function Signup() {
   const [name, setName] = useState('');
@@ -28,13 +29,11 @@ export function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const signup = (signupInput: any) => {
-    console.log('Signup input:', signupInput);
-    return Promise.resolve(true);
-  };
+  const signup = useAuthStore((state) => state.signup);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setLoading(true);
 
     try {

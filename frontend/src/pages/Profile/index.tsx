@@ -4,17 +4,23 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { LogOut, Mail, UserRound } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '../../components/ui/input-group';
+import { useAuthStore } from '../../stores/auth';
 
 export function Profile() {
-  const [name, setName] = useState('Conta teste');
-  const [email] = useState('conta@teste.com');
+  const { user, logout } = useAuthStore();
+  const email = user?.email || '';
+
+  const [name, setName] = useState(email);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const initials = name
     .split(' ')
@@ -37,9 +43,10 @@ export function Profile() {
     }
   };
 
-  const handleLogout = async () => {
-    await Promise.resolve(true);
-    toast.success('Sessão encerrada com sucesso!');
+  const handleLogout = () => {
+    logout();
+
+    navigate('/login');
   };
 
   return (

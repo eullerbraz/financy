@@ -103,9 +103,25 @@ export interface RegisterInput {
   password: string;
 }
 
+export interface RegisterMutationData {
+  register: {
+    token: string;
+    refreshToken: string;
+    user: User;
+  };
+}
+
 export interface LoginInput {
   email: string;
   password: string;
+}
+
+export interface LoginMutationData {
+  login: {
+    token: string;
+    refreshToken: string;
+    user: User;
+  };
 }
 
 export interface Category {
