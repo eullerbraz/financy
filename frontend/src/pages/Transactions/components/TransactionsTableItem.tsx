@@ -65,7 +65,7 @@ export function TransactionsTableItem({
         <div className='flex items-center gap-1'>
           <div className='min-w-28 flex items-center justify-center'>
             <span className='text-sm font-normal text-gray-600'>
-              {transaction.date.toLocaleDateString('pt-BR', {
+              {new Date(transaction.date).toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: '2-digit',
                 year: '2-digit',

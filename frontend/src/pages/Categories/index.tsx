@@ -70,7 +70,7 @@ export function Categories() {
       <CreateCategoryDialog
         open={openDialog}
         onOpenChange={setOpenDialog}
-        onCreated={() => refetch()}
+        onCreated={refetch}
       />
     </>
   );

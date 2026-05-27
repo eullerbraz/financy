@@ -93,8 +93,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface RegisterInput {
@@ -134,20 +134,19 @@ export interface Category {
   user?: User;
   countTransactions?: number;
   transactionAmount?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Transaction {
   id: string;
   description: string;
-  date: Date;
+  date: string;
   amount: number;
   type: TransactionType;
   categoryId: string;
   category: Category;
   userId: string;
-  user?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -7,15 +7,8 @@ import {
 } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../../components/ui/button.tsx';
-import type { Transaction } from '../../../types/index.ts';
-import { TransactionsTableItem } from './TransactionsTableItem.tsx';
 
-export function TransactionsTable({
-  transactions,
-}: {
-  transactions: Transaction[];
-  onEditTransaction: (transaction: Transaction) => void;
-}) {
+export function TransactionsTableSkeleton() {
   return (
     <Card className='gap-0 overflow-hidden border border-gray-200 p-0'>
       <CardHeader className='px-6 py-4 flex items-center justify-between gap-0'>
@@ -45,10 +38,10 @@ export function TransactionsTable({
       </CardHeader>
 
       <CardContent className='p-0'>
-        {transactions.map((transaction) => (
-          <TransactionsTableItem
-            key={transaction.id}
-            transaction={transaction}
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={`transaction-skeleton-${i}`}
+            className='h-[73px] rounded-lg border border-dashed border-gray-200'
           />
         ))}
       </CardContent>
@@ -58,9 +51,9 @@ export function TransactionsTable({
           <span className='text-sm font-regular text-gray-700'>
             <span className='font-medium'>1</span>
             {' a '}
-            <span className='font-medium'>{transactions.length}</span>
+            <span className='font-medium'>10</span>
             {' | '}
-            <span className='font-medium'>{transactions.length}</span>
+            <span className='font-medium'>10</span>
             {' resultados'}
           </span>
 
@@ -83,20 +76,7 @@ export function TransactionsTable({
               size='icon'
               variant='outline'
               className='text-gray-700 border-gray-300'
-            >
-              2
-            </Button>
-            <Button
-              size='icon'
-              variant='outline'
-              className='text-gray-700 border-gray-300'
-            >
-              3
-            </Button>
-            <Button
-              size='icon'
-              variant='outline'
-              className='text-gray-700 border-gray-300'
+              disabled
             >
               <ChevronRight className='size-4' />
             </Button>
