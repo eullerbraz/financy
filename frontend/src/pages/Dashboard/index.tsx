@@ -13,6 +13,8 @@ import {
   Plus,
   Wallet,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Colors,
   IconsEnum,
@@ -20,6 +22,7 @@ import {
   type Category,
   type Transaction,
 } from '../../types';
+import { CreateTransactionDialog } from '../Transactions/components/CreateTransactionDialog';
 import { DashboardCategoryItem } from './components/DashboardCategoryItem';
 import { DashboardMetricCard } from './components/DashboardMetricCard';
 import { DashboardTransactionItem } from './components/DashboardTransactionItem';
@@ -267,77 +270,90 @@ const categories: Category[] = [
 ];
 
 export function Dashboard() {
+  const [openCreateDialog, setCreateOpenDialog] = useState(false);
+
   return (
-    <div className='flex flex-1 gap-6 flex-col w-full p-12 justify-start'>
-      <section className='grid gap-6 grid-cols-3'>
-        {metrics.map((metric) => (
-          <DashboardMetricCard key={metric.label} metric={metric} />
-        ))}
-      </section>
-
-      <section className='grid gap-6 grid-cols-3 items-start'>
-        <Card className='gap-0 p-0 col-span-2 border border-gray-200'>
-          <CardHeader className='px-6 py-4 flex items-center justify-between gap-4'>
-            <CardTitle className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-              Transações recentes
-            </CardTitle>
-            <CardAction>
+    <>
+      <div className='flex flex-1 gap-6 flex-col w-full p-12 justify-start'>
+        <section className='grid gap-6 grid-cols-3'>
+          {metrics.map((metric) => (
+            <DashboardMetricCard key={metric.label} metric={metric} />
+          ))}
+        </section>
+        <section className='grid gap-6 grid-cols-3 items-start'>
+          <Card className='gap-0 p-0 col-span-2 border border-gray-200'>
+            <CardHeader className='px-6 py-4 flex items-center justify-between gap-4'>
+              <CardTitle className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+                Transações recentes
+              </CardTitle>
+              <CardAction>
+                <Link to='/transactions'>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    className='gap-1 text-sm text-brand font-medium hover:brand-dark'
+                  >
+                    Ver todas
+                    <ChevronRight className='size-5' />
+                  </Button>
+                </Link>
+              </CardAction>
+            </CardHeader>
+            <CardContent className='p-0'>
+              {recentTransactions.map((transaction) => (
+                <DashboardTransactionItem
+                  key={transaction.id}
+                  transaction={transaction}
+                />
+              ))}
+            </CardContent>
+            <div className='flex justify-center items-center border-t border-gray-200 px-6 py-4'>
               <Button
-                variant='ghost'
                 size='sm'
-                className='gap-1 text-sm text-brand font-medium hover:brand-dark'
-              >
-                Ver todas
-                <ChevronRight className='size-5' />
-              </Button>
-            </CardAction>
-          </CardHeader>
-
-          <CardContent className='p-0'>
-            {recentTransactions.map((transaction) => (
-              <DashboardTransactionItem
-                key={transaction.id}
-                transaction={transaction}
-              />
-            ))}
-          </CardContent>
-
-          <div className='flex justify-center items-center border-t border-gray-200 px-6 py-4'>
-            <Button
-              size='sm'
-              variant='ghost'
-              className='gap-1 text-sm text-brand font-medium hover:brand-dark'
-            >
-              <Plus className='size-5' />
-              Nova transação
-            </Button>
-          </div>
-        </Card>
-
-        <Card className='gap-0 p-0 border border-gray-200'>
-          <CardHeader className='px-6 py-4 flex items-center justify-between gap-4 border-b border-gray-200'>
-            <CardTitle className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-              Categorias
-            </CardTitle>
-            <CardAction>
-              <Button
                 variant='ghost'
-                size='sm'
                 className='gap-1 text-sm text-brand font-medium hover:brand-dark'
+                onClick={() => setCreateOpenDialog(true)}
               >
-                Gerenciar
-                <ChevronRight className='size-5' />
+                <Plus className='size-5' />
+                Nova transação
               </Button>
-            </CardAction>
-          </CardHeader>
+            </div>
+          </Card>
+          <Card className='gap-0 p-0 border border-gray-200'>
+            <CardHeader className='px-6 py-4 flex items-center justify-between gap-4 border-b border-gray-200'>
+              <CardTitle className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+                Categorias
+              </CardTitle>
+              <CardAction>
+                <Link to='/transactions'>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    className='gap-1 text-sm text-brand font-medium hover:brand-dark'
+                  >
+                    Gerenciar
+                    <ChevronRight className='size-5' />
+                  </Button>
+                </Link>
+              </CardAction>
+            </CardHeader>
+            <CardContent className='flex flex-col gap-5 p-6'>
+              {categories.map((category) => (
+                <DashboardCategoryItem
+                  key={category.name}
+                  category={category}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        </section>
+      </div>
 
-          <CardContent className='flex flex-col gap-5 p-6'>
-            {categories.map((category) => (
-              <DashboardCategoryItem key={category.name} category={category} />
-            ))}
-          </CardContent>
-        </Card>
-      </section>
-    </div>
+      <CreateTransactionDialog
+        open={openCreateDialog}
+        onOpenChange={setCreateOpenDialog}
+        onCreated={() => console.log('Transação criada')}
+      />
+    </>
   );
 }
