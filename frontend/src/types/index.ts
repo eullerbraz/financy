@@ -116,6 +116,8 @@ export interface Category {
   color: Colors;
   userId: string;
   user?: User;
+  countTransactions?: number;
+  transactionAmount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

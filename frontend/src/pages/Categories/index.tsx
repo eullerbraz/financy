@@ -1,136 +1,91 @@
 import { Button } from '@/components/ui/button';
-import {
-  ArrowUpDown,
-  BriefcaseBusiness,
-  CarFront,
-  HeartPulse,
-  PiggyBank,
-  Plus,
-  ShoppingCart,
-  Tag,
-  Ticket,
-  ToolCase,
-  Utensils,
-} from 'lucide-react';
+import { ArrowUpDown, Plus, Tag, Utensils } from 'lucide-react';
 import { useState } from 'react';
+import { Colors, IconsEnum, type Category } from '../../types';
 import { CategoryCardItem } from './components/CategoryCardItem';
 import { CategoryMetricCard } from './components/CategoryMetricCard';
 import { CreateCategoryDialog } from './components/CreateCategoryDialog';
 
-export type CategoryTone =
-  | 'blue'
-  | 'purple'
-  | 'green'
-  | 'orange'
-  | 'pink'
-  | 'yellow';
-
-export type Category = {
-  name: string;
-  description: string;
-  items: number;
-  amount: number;
-  tone: CategoryTone;
-  icon: typeof Tag;
-};
-
-export const colorsMap = {
-  blue: {
-    bg: 'bg-blue-light',
-    text: 'text-blue',
-    textDark: 'text-blue-dark',
-  },
-  purple: {
-    bg: 'bg-purple-light',
-    text: 'text-purple',
-    textDark: 'text-purple-dark',
-  },
-  green: {
-    bg: 'bg-green-light',
-    text: 'text-green',
-    textDark: 'text-green-dark',
-  },
-  orange: {
-    bg: 'bg-orange-light',
-    text: 'text-orange',
-    textDark: 'text-orange-dark',
-  },
-  pink: {
-    bg: 'bg-pink-light',
-    text: 'text-pink',
-    textDark: 'text-pink-dark',
-  },
-  yellow: {
-    bg: 'bg-yellow-light',
-    text: 'text-yellow',
-    textDark: 'text-yellow-dark',
-  },
-} as const;
-
 export const categories: Category[] = [
   {
+    id: 'c-1',
     name: 'Alimentação',
     description: 'Restaurantes, delivery e refeições',
-    items: 12,
-    amount: 542.3,
-    tone: 'blue',
-    icon: Utensils,
+    userId: 'u-1',
+    countTransactions: 12,
+    transactionAmount: 542.3,
+    color: Colors.blue,
+    icon: IconsEnum.Utensils,
   },
   {
+    id: 'c-2',
     name: 'Entretenimento',
     description: 'Cinema, jogos e lazer',
-    items: 2,
-    amount: 186.2,
-    tone: 'pink',
-    icon: Ticket,
+    userId: 'u-1',
+    countTransactions: 2,
+    transactionAmount: 186.2,
+    color: Colors.pink,
+    icon: IconsEnum.Ticket,
   },
   {
+    id: 'c-3',
     name: 'Investimento',
     description: 'Aplicações e retornos financeiros',
-    items: 1,
-    amount: 340.25,
-    tone: 'green',
-    icon: PiggyBank,
+    userId: 'u-1',
+    countTransactions: 1,
+    transactionAmount: 340.25,
+    color: Colors.green,
+    icon: IconsEnum.PiggyBank,
   },
   {
+    id: 'c-4',
     name: 'Mercado',
     description: 'Compras de supermercado e mantimentos',
-    items: 3,
-    amount: 298.75,
-    tone: 'orange',
-    icon: ShoppingCart,
+    userId: 'u-1',
+    countTransactions: 3,
+    transactionAmount: 298.75,
+    color: Colors.orange,
+    icon: IconsEnum.ShoppingCart,
   },
   {
+    id: 'c-5',
     name: 'Salário',
     description: 'Renda mensal e bonificações',
-    items: 3,
-    amount: 6750,
-    tone: 'green',
-    icon: BriefcaseBusiness,
+    userId: 'u-1',
+    countTransactions: 3,
+    transactionAmount: 6750,
+    color: Colors.green,
+    icon: IconsEnum.BriefcaseBusiness,
   },
   {
+    id: 'c-6',
     name: 'Saúde',
     description: 'Medicamentos, consultas e exames',
-    items: 0,
-    amount: 0,
-    tone: 'pink',
-    icon: HeartPulse,
+    userId: 'u-1',
+    countTransactions: 0,
+    transactionAmount: 0,
+    color: Colors.pink,
+    icon: IconsEnum.HeartPulse,
   },
   {
+    id: 'c-7',
     name: 'Transporte',
     description: 'Gasolina, transporte público e viagens',
-    items: 8,
-    amount: 385.5,
-    tone: 'purple',
-    icon: CarFront,
+    userId: 'u-1',
+    countTransactions: 8,
+    transactionAmount: 385.5,
+    color: Colors.purple,
+    icon: IconsEnum.CarFront,
   },
   {
+    id: 'c-8',
     name: 'Utilidades',
     description: 'Energia, água, internet e telefone',
-    items: 7,
-    amount: 245.8,
-    tone: 'yellow',
-    icon: ToolCase,
+    userId: 'u-1',
+    countTransactions: 7,
+    transactionAmount: 245.8,
+    color: Colors.yellow,
+    icon: IconsEnum.ToolCase,
   },
 ];
 

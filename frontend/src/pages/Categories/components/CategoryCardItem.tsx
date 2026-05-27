@@ -6,13 +6,46 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { SquarePen, Trash } from 'lucide-react';
-import { colorsMap, type Category } from '..';
 import { CategoryLogo } from '../../../components/CategoryLogo';
 import { CategoryTag } from '../../../components/CategoryTag';
+import { IconsMap, type Category } from '../../../types';
+
+export const colorsMap = {
+  blue: {
+    bg: 'bg-blue-light',
+    text: 'text-blue',
+    textDark: 'text-blue-dark',
+  },
+  purple: {
+    bg: 'bg-purple-light',
+    text: 'text-purple',
+    textDark: 'text-purple-dark',
+  },
+  green: {
+    bg: 'bg-green-light',
+    text: 'text-green',
+    textDark: 'text-green-dark',
+  },
+  orange: {
+    bg: 'bg-orange-light',
+    text: 'text-orange',
+    textDark: 'text-orange-dark',
+  },
+  pink: {
+    bg: 'bg-pink-light',
+    text: 'text-pink',
+    textDark: 'text-pink-dark',
+  },
+  yellow: {
+    bg: 'bg-yellow-light',
+    text: 'text-yellow',
+    textDark: 'text-yellow-dark',
+  },
+};
 
 export function CategoryCardItem({ category }: { category: Category }) {
-  const Icon = category.icon;
-  const color = colorsMap[category.tone];
+  const Icon = IconsMap[category.icon as keyof typeof IconsMap];
+  const color = colorsMap[category.color as keyof typeof colorsMap];
 
   return (
     <Card className='flex flex-col gap-5 border border-gray-200 p-6'>
@@ -38,7 +71,7 @@ export function CategoryCardItem({ category }: { category: Category }) {
         </div>
       </CardHeader>
 
-      <CardContent className='flex flex-col'>
+      <CardContent className='flex flex-col p-0'>
         <div className='flex flex-col gap-1'>
           <h3 className='text-base font-semibold text-gray-800'>
             {category.name}
@@ -58,7 +91,8 @@ export function CategoryCardItem({ category }: { category: Category }) {
         />
 
         <span className='text-sm font-normal text-gray-600'>
-          {category.items} {category.items === 1 ? 'item' : 'itens'}
+          {category.countTransactions}{' '}
+          {category.countTransactions === 1 ? 'item' : 'itens'}
         </span>
       </CardFooter>
     </Card>

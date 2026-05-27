@@ -1,22 +1,3 @@
-import {
-  BaggageClaim,
-  BookOpen,
-  BriefcaseBusiness,
-  CarFront,
-  Dumbbell,
-  Gift,
-  HeartPulse,
-  Home,
-  Mailbox,
-  PawPrint,
-  PiggyBank,
-  ReceiptText,
-  ShoppingCart,
-  Ticket,
-  ToolCase,
-  Utensils,
-  type LucideProps,
-} from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../../../components/ui/button';
 import {
@@ -28,39 +9,9 @@ import {
 } from '../../../components/ui/dialog';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
+import { IconsEnum, type Colors } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
-
-export interface Icon {
-  name: string;
-  icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-  >;
-}
-
-export interface Color {
-  name: string;
-  bg: string;
-}
-
-export const icons = [
-  { name: 'BriefcaseBusiness', icon: BriefcaseBusiness },
-  { name: 'CarFront', icon: CarFront },
-  { name: 'HeartPulse', icon: HeartPulse },
-  { name: 'PiggyBank', icon: PiggyBank },
-  { name: 'ShoppingCart', icon: ShoppingCart },
-  { name: 'Ticket', icon: Ticket },
-  { name: 'ToolCase', icon: ToolCase },
-  { name: 'Utensils', icon: Utensils },
-  { name: 'PawPrint', icon: PawPrint },
-  { name: 'Home', icon: Home },
-  { name: 'Gift', icon: Gift },
-  { name: 'Dumbbell', icon: Dumbbell },
-  { name: 'BookOpen', icon: BookOpen },
-  { name: 'BaggageClaim', icon: BaggageClaim },
-  { name: 'Mailbox', icon: Mailbox },
-  { name: 'ReceiptText', icon: ReceiptText },
-];
 
 export const colorsMap = {
   green: 'bg-green',
@@ -85,8 +36,8 @@ export function CreateCategoryDialog({
 }: CreateCategoryDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [icon, setIcon] = useState<Icon | null>(null);
-  const [color, setColor] = useState<Color | null>(null);
+  const [icon, setIcon] = useState<IconsEnum | null>(null);
+  const [color, setColor] = useState<Colors | null>(null);
 
   const loading = false; // TODO: loading state from mutation
 
@@ -182,7 +133,10 @@ export function CreateCategoryDialog({
               Ícone
             </Label>
 
-            <CategoryIconInput onValueChange={setIcon} icons={icons} />
+            <CategoryIconInput
+              onValueChange={setIcon}
+              icons={Object.values(IconsEnum)}
+            />
           </div>
 
           <div className='group flex flex-col gap-2'>
