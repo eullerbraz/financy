@@ -72,12 +72,12 @@ export function EditTransactionDialog({
     },
   });
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!transaction) return;
 
-    updateTransactionById({
+    await updateTransactionById({
       variables: {
         updateTransactionByIdId: transaction.id,
         data: {

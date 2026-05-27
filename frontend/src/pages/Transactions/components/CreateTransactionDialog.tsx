@@ -58,10 +58,10 @@ export function CreateTransactionDialog({
     },
   });
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    createTransaction({
+    await createTransaction({
       variables: {
         data: {
           type,

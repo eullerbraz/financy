@@ -45,10 +45,10 @@ export function CreateCategoryDialog({
     },
   });
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    createCategory({
+    await createCategory({
       variables: {
         data: {
           name,

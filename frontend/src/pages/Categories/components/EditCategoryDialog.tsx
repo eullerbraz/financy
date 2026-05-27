@@ -58,12 +58,12 @@ export function EditCategoryDialog({
     },
   });
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!category) return;
 
-    updateCategoryById({
+    await updateCategoryById({
       variables: {
         updateCategoryByIdId: category.id,
         data: {
