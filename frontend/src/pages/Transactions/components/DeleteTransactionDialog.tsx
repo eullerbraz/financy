@@ -1,3 +1,5 @@
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 import { Button } from '../../../components/ui/button';
 import {
   Dialog,
@@ -7,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../../components/ui/dialog';
+import { DELETE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
 import type { Transaction } from '../../../types';
 
 interface DeleteTransactionDialogProps {
@@ -22,12 +25,27 @@ export function DeleteTransactionDialog({
   transaction,
   onDeleted,
 }: DeleteTransactionDialogProps) {
-  const loading = false; // TODO: loading state from mutation
+  const [deleteTransactionById, { loading }] = useMutation(DELETE_TRANSACTION, {
+    onCompleted() {
+      toast.success('Transação removida com sucesso');
+
+      onOpenChange(false);
+
+      onDeleted?.();
+    },
+    onError() {
+      toast.error('Falha ao remover a transação');
+    },
+  });
 
   const handleDeleteTransaction = async () => {
     if (!transaction) return;
 
-    onDeleted();
+    await deleteTransactionById({
+      variables: {
+        deleteTransactionByIdId: transaction.id,
+      },
+    });
   };
 
   return (

@@ -42,3 +42,9 @@ export const UPDATE_TRANSACTION = gql`
     }
   }
 `;
+
+export const DELETE_TRANSACTION = gql`
+  mutation DeleteTransactionById($deleteTransactionByIdId: String!) {
+    deleteTransactionById(id: $deleteTransactionByIdId)
+  }
+`;
