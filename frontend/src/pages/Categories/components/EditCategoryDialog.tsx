@@ -12,6 +12,7 @@ import {
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { UPDATE_CATEGORY } from '../../../lib/graphql/mutations/Category';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
 import { Colors, IconsEnum, type Category } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
@@ -46,6 +47,7 @@ export function EditCategoryDialog({
   }, [category, open]);
 
   const [updateCategoryById, { loading }] = useMutation(UPDATE_CATEGORY, {
+    refetchQueries: [{ query: LIST_CATEGORIES }],
     onCompleted() {
       toast.success('Categoria atualizada com sucesso');
 

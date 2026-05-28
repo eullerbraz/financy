@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '../../../components/ui/dialog';
 import { DELETE_CATEGORY } from '../../../lib/graphql/mutations/Category';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
 import type { Category } from '../../../types';
 
 interface DeleteCategoryDialogProps {
@@ -26,6 +27,7 @@ export function DeleteCategoryDialog({
   onDeleted,
 }: DeleteCategoryDialogProps) {
   const [deleteCategoryById, { loading }] = useMutation(DELETE_CATEGORY, {
+    refetchQueries: [{ query: LIST_CATEGORIES }],
     onCompleted() {
       toast.success('Categoria removida com sucesso');
 

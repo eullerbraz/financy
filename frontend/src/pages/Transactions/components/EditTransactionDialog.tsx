@@ -21,6 +21,10 @@ import {
 } from '../../../components/ui/select';
 import { UPDATE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
 import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
+import {
+  LIST_RECENT_TRANSACTIONS,
+  LIST_TRANSACTIONS,
+} from '../../../lib/graphql/queries/Transaction';
 import { TransactionType, type Transaction } from '../../../types';
 import { TransactionTypeInput } from './TransactionTypeInput';
 
@@ -60,6 +64,11 @@ export function EditTransactionDialog({
   const categories = data?.getAllCategoriesByUserId || [];
 
   const [updateTransactionById, { loading }] = useMutation(UPDATE_TRANSACTION, {
+    refetchQueries: [
+      { query: LIST_CATEGORIES },
+      { query: LIST_RECENT_TRANSACTIONS },
+      { query: LIST_TRANSACTIONS },
+    ],
     onCompleted() {
       toast.success('Transaction atualizada com sucesso');
 

@@ -10,6 +10,11 @@ import {
   DialogTitle,
 } from '../../../components/ui/dialog';
 import { DELETE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
+import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
+import {
+  LIST_RECENT_TRANSACTIONS,
+  LIST_TRANSACTIONS,
+} from '../../../lib/graphql/queries/Transaction';
 import type { Transaction } from '../../../types';
 
 interface DeleteTransactionDialogProps {
@@ -26,6 +31,11 @@ export function DeleteTransactionDialog({
   onDeleted,
 }: DeleteTransactionDialogProps) {
   const [deleteTransactionById, { loading }] = useMutation(DELETE_TRANSACTION, {
+    refetchQueries: [
+      { query: LIST_CATEGORIES },
+      { query: LIST_RECENT_TRANSACTIONS },
+      { query: LIST_TRANSACTIONS },
+    ],
     onCompleted() {
       toast.success('Transação removida com sucesso');
 
