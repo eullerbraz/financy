@@ -99,6 +99,34 @@ export class TransactionsService {
     });
   }
 
+  async transactionsAmountByCategoryId(categoryId: string) {
+    const {
+      _sum: { amount: outflowAmount },
+    } = await prismaClient.transaction.aggregate({
+      where: {
+        categoryId,
+        type: TransactionType.outflow,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const {
+      _sum: { amount: inflowAmount },
+    } = await prismaClient.transaction.aggregate({
+      where: {
+        categoryId,
+        type: TransactionType.inflow,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return (inflowAmount ?? 0) - (outflowAmount ?? 0);
+  }
+
   async updateTransactionById(id: string, data: UpdateTransactionInput) {
     const transaction = await prismaClient.transaction.findUnique({
       where: { id },

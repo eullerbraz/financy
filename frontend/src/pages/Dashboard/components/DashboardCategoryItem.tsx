@@ -11,12 +11,13 @@ export function DashboardCategoryItem({ category }: { category: Category }) {
         textColor={`text-${category.color}-dark`}
       />
 
-      <div className='flex items-center justify-end flex-1'>
+      <div className='flex items-center justify-end flex-1 gap-4'>
         <span className='min-w-16 text-sm font-normal text-gray-600 text-right'>
-          {category.countTransactions} itens
+          {category.countTransactions}{' '}
+          {category.countTransactions === 1 ? 'item' : 'itens'}
         </span>
         <span className='min-w-24 text-sm font-semibold text-gray-800 text-right'>
-          {formatCurrency(category.transactionAmount!)}
+          {formatCurrency(category.transactionsAmount!)}
         </span>
       </div>
     </div>

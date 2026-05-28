@@ -133,7 +133,7 @@ export interface Category {
   userId: string;
   user?: User;
   countTransactions?: number;
-  transactionAmount?: number;
+  transactionsAmount?: number;
   createdAt?: string;
   updatedAt?: string;
 }
