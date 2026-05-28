@@ -150,3 +150,10 @@ export interface Transaction {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface TransactionsMany {
+  transactions: Transaction[];
+  totalInflow: number;
+  totalOutflow: number;
+  balance: number;
+}

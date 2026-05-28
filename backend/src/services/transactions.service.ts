@@ -3,6 +3,7 @@ import {
   CreateTransactionInput,
   UpdateTransactionInput,
 } from '../dtos/input/transaction.input';
+import { TransactionType } from '../models/transaction.model';
 
 export class TransactionsService {
   async createTransaction(data: CreateTransactionInput, userId: string) {
@@ -36,6 +37,50 @@ export class TransactionsService {
         userId,
       },
     });
+  }
+
+  async getRecentTransactionsByUserId(userId: string) {
+    return prismaClient.transaction.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        date: 'desc',
+      },
+      take: 5,
+    });
+  }
+
+  async getAllInflowsAmountByUserId(userId: string) {
+    const {
+      _sum: { amount },
+    } = await prismaClient.transaction.aggregate({
+      where: {
+        userId,
+        type: TransactionType.inflow,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return amount ?? 0;
+  }
+
+  async getAllOutflowsAmountByUserId(userId: string) {
+    const {
+      _sum: { amount },
+    } = await prismaClient.transaction.aggregate({
+      where: {
+        userId,
+        type: TransactionType.outflow,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return amount ?? 0;
   }
 
   async getAllTransactionsByCategoryId(categoryId: string) {

@@ -45,3 +45,18 @@ export class TransactionModel {
   @Field(() => GraphQLISODateTime)
   updatedAt!: Date;
 }
+
+@ObjectType()
+export class TransactionsManyModel {
+  @Field(() => [TransactionModel])
+  transactions!: TransactionModel[];
+
+  @Field(() => Number)
+  totalInflow!: number;
+
+  @Field(() => Number)
+  totalOutflow!: number;
+
+  @Field(() => Number)
+  balance!: number;
+}

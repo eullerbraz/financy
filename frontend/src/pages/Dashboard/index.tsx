@@ -17,7 +17,7 @@ import {
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LIST_CATEGORIES } from '../../lib/graphql/queries/Category';
-import { LIST_TRANSACTIONS } from '../../lib/graphql/queries/Transaction';
+import { LIST_RECENT_TRANSACTIONS } from '../../lib/graphql/queries/Transaction';
 import { Colors } from '../../types';
 import { CreateTransactionDialog } from '../Transactions/components/CreateTransactionDialog';
 import { DashboardCategoryItem } from './components/DashboardCategoryItem';
@@ -31,32 +31,17 @@ export interface DashboardMetric {
   color: string;
 }
 
-const metrics: DashboardMetric[] = [
-  {
-    label: 'Saldo total',
-    value: 12847.32,
-    icon: Wallet,
-    color: Colors.purple,
-  },
-  {
-    label: 'Receitas do mês',
-    value: 4250.0,
-    icon: CircleArrowUp,
-    color: Colors.green,
-  },
-  {
-    label: 'Despesas do mês',
-    value: 2180.45,
-    icon: CircleArrowDown,
-    color: Colors.red,
-  },
-];
-
 export function Dashboard() {
-  const { data: transactionsData, refetch: refetchTransactions } =
-    useQuery(LIST_TRANSACTIONS);
+  const { data: transactionsData, refetch: refetchTransactions } = useQuery(
+    LIST_RECENT_TRANSACTIONS,
+  );
 
-  const transactions = transactionsData?.getAllTransactionsByUserId || [];
+  const {
+    transactions = [],
+    totalInflow = 0,
+    totalOutflow = 0,
+    balance = 0,
+  } = transactionsData?.getRecentTransactionsByUserId ?? {};
 
   const { data: categoriesData, refetch: refetchCategories } =
     useQuery(LIST_CATEGORIES);
@@ -69,6 +54,27 @@ export function Dashboard() {
     refetchTransactions();
     refetchCategories();
   };
+
+  const metrics: DashboardMetric[] = [
+    {
+      label: 'Saldo total',
+      value: balance,
+      icon: Wallet,
+      color: Colors.purple,
+    },
+    {
+      label: 'Receitas do mês',
+      value: totalInflow,
+      icon: CircleArrowUp,
+      color: Colors.green,
+    },
+    {
+      label: 'Despesas do mês',
+      value: totalOutflow,
+      icon: CircleArrowDown,
+      color: Colors.red,
+    },
+  ];
 
   return (
     <>

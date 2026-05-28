@@ -14,7 +14,10 @@ import {
 import { GqlUser } from '../graphql/decorators/user.decorator';
 import { IsAuthenticated } from '../middlewares/auth.middleware';
 import { CategoryModel } from '../models/category.model';
-import { TransactionModel } from '../models/transaction.model';
+import {
+  TransactionModel,
+  TransactionsManyModel,
+} from '../models/transaction.model';
 import { UserModel } from '../models/user.model';
 import { CategoriesService } from '../services/categories.service';
 import { TransactionsService } from '../services/transactions.service';
@@ -64,6 +67,24 @@ export class TransactionResolver {
     @Arg('categoryId', () => String) categoryId: string,
   ): Promise<TransactionModel[]> {
     return this.transactionService.getAllTransactionsByCategoryId(categoryId);
+  }
+
+  @Query(() => TransactionsManyModel)
+  async getRecentTransactionsByUserId(
+    @GqlUser() user: UserModel,
+  ): Promise<TransactionsManyModel> {
+    const [transactions, totalInflow, totalOutflow] = await Promise.all([
+      this.transactionService.getRecentTransactionsByUserId(user.id),
+      this.transactionService.getAllInflowsAmountByUserId(user.id),
+      this.transactionService.getAllOutflowsAmountByUserId(user.id),
+    ]);
+
+    return {
+      transactions,
+      totalInflow,
+      totalOutflow,
+      balance: totalInflow - totalOutflow,
+    };
   }
 
   @Query(() => TransactionModel)

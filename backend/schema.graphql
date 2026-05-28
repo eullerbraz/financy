@@ -76,6 +76,7 @@ type Query {
   getAllTransactionsByCategoryId(categoryId: String!): [TransactionModel!]!
   getAllTransactionsByUserId: [TransactionModel!]!
   getCategoryById(id: String!): CategoryModel!
+  getRecentTransactionsByUserId: TransactionsManyModel!
   getTransactionById(id: String!): TransactionModel!
   health: String!
 }
@@ -110,6 +111,13 @@ type TransactionModel {
 enum TransactionType {
   inflow
   outflow
+}
+
+type TransactionsManyModel {
+  balance: Float!
+  totalInflow: Float!
+  totalOutflow: Float!
+  transactions: [TransactionModel!]!
 }
 
 input UpdateCategoryInput {
