@@ -17,7 +17,7 @@ export function Profile() {
   const { user, logout } = useAuthStore();
   const email = user?.email || '';
 
-  const [name, setName] = useState(email);
+  const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ export function Profile() {
 
         <div className='flex flex-col items-center gap-0.5'>
           <CardTitle className='text-xl font-semibold text-gray-800'>
-            Conta teste
+            {user?.name || 'Usuário'}
           </CardTitle>
 
           <p className='text-base font-normal text-gray-500'>{email}</p>
@@ -73,7 +73,7 @@ export function Profile() {
         <form onSubmit={handleSave} className='flex flex-col gap-5'>
           <div className='group flex flex-col gap-2'>
             <Label
-              htmlFor='email'
+              htmlFor='name'
               className='group-has-[[data-slot=input-group-control]:focus-visible]:text-brand'
             >
               Nome completo
