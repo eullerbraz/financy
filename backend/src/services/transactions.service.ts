@@ -99,6 +99,14 @@ export class TransactionsService {
     });
   }
 
+  async countAllTransactionsByUserId(userId: string) {
+    return prismaClient.transaction.count({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async transactionsAmountByCategoryId(categoryId: string) {
     const {
       _sum: { amount: outflowAmount },

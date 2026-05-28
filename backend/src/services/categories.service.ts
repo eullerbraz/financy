@@ -37,6 +37,29 @@ export class CategoriesService {
     });
   }
 
+  async countAllCategoriesByUserId(userId: string) {
+    return prismaClient.category.count({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  async getMostUsedCategoryByUserId(userId: string) {
+    const category = await prismaClient.category.findFirst({
+      where: {
+        userId,
+      },
+      orderBy: {
+        transactions: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    return category;
+  }
+
   async updateCategoryById(id: string, data: UpdateCategoryInput) {
     const category = await prismaClient.category.findUnique({
       where: { id },

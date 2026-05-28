@@ -138,6 +138,12 @@ export interface Category {
   updatedAt?: string;
 }
 
+export interface CategoriesMetrics {
+  countCategories: number;
+  countTransactions: number;
+  mostUsedCategory: Category | null;
+}
+
 export interface Transaction {
   id: string;
   description: string;

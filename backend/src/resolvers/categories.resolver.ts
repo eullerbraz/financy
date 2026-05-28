@@ -13,7 +13,10 @@ import {
 } from '../dtos/input/category.input';
 import { GqlUser } from '../graphql/decorators/user.decorator';
 import { IsAuthenticated } from '../middlewares/auth.middleware';
-import { CategoryModel } from '../models/category.model';
+import {
+  CategoriesMetricsModel,
+  CategoryModel,
+} from '../models/category.model';
 import { TransactionModel } from '../models/transaction.model';
 import { UserModel } from '../models/user.model';
 import { CategoriesService } from '../services/categories.service';
@@ -57,6 +60,24 @@ export class CategoryResolver {
     @GqlUser() user: UserModel,
   ): Promise<CategoryModel[]> {
     return this.categoryService.getAllCategoriesByUserId(user.id);
+  }
+
+  @Query(() => CategoriesMetricsModel)
+  async getCategoriesMetricsByUserId(
+    @GqlUser() user: UserModel,
+  ): Promise<CategoriesMetricsModel> {
+    const [countCategories, countTransactions, mostUsedCategory] =
+      await Promise.all([
+        this.categoryService.countAllCategoriesByUserId(user.id),
+        this.transactionService.countAllTransactionsByUserId(user.id),
+        this.categoryService.getMostUsedCategoryByUserId(user.id),
+      ]);
+
+    return {
+      countCategories,
+      countTransactions,
+      mostUsedCategory,
+    };
   }
 
   @Query(() => CategoryModel)

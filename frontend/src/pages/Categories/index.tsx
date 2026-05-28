@@ -2,7 +2,10 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@apollo/client/react';
 import { ArrowUpDown, Plus, Tag, Utensils } from 'lucide-react';
 import { useState } from 'react';
-import { LIST_CATEGORIES } from '../../lib/graphql/queries/Category';
+import {
+  CATEGORIES_METRICS,
+  LIST_CATEGORIES,
+} from '../../lib/graphql/queries/Category';
 import type { Category } from '../../types';
 import { CategoryCardItem } from './components/CategoryCardItem';
 import { CategoryMetricCard } from './components/CategoryMetricCard';
@@ -11,9 +14,24 @@ import { DeleteCategoryDialog } from './components/DeleteCategoryDialog';
 import { EditCategoryDialog } from './components/EditCategoryDialog';
 
 export function Categories() {
-  const { data, loading, refetch } = useQuery(LIST_CATEGORIES);
+  const {
+    data: categoriesData,
+    loading: categoriesLoading,
+    refetch: categoriesRefetch,
+  } = useQuery(LIST_CATEGORIES);
 
-  const categories = data?.getAllCategoriesByUserId || [];
+  const {
+    data: metricsData,
+    loading: metricsLoading,
+    refetch: metricsRefetch,
+  } = useQuery(CATEGORIES_METRICS);
+
+  const categories = categoriesData?.getAllCategoriesByUserId || [];
+  const {
+    countCategories = 0,
+    countTransactions = 0,
+    mostUsedCategory,
+  } = metricsData?.getCategoriesMetricsByUserId || {};
 
   const [category, setCategory] = useState<Category | null>(null);
 
@@ -31,6 +49,13 @@ export function Categories() {
 
     setOpenDeleteDialog(true);
   };
+
+  const refetch = () => {
+    categoriesRefetch();
+    metricsRefetch();
+  };
+
+  const loading = categoriesLoading || metricsLoading;
 
   return (
     <>
@@ -55,19 +80,19 @@ export function Categories() {
           <CategoryMetricCard
             icon={Tag}
             label='Total de categorias'
-            value='8'
+            value={countCategories.toString()}
             iconColor='text-gray-700'
           />
           <CategoryMetricCard
             icon={ArrowUpDown}
             label='Total de transações'
-            value='27'
+            value={countTransactions.toString()}
             iconColor='text-purple'
           />
           <CategoryMetricCard
             icon={Utensils}
             label='Categoria mais utilizada'
-            value='Alimentação'
+            value={mostUsedCategory?.name || 'Nenhuma'}
             iconColor='text-blue'
           />
         </section>

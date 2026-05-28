@@ -50,3 +50,15 @@ export class CategoryModel {
   @Field(() => GraphQLISODateTime)
   updatedAt!: Date;
 }
+
+@ObjectType()
+export class CategoriesMetricsModel {
+  @Field(() => Number)
+  countCategories!: number;
+
+  @Field(() => Number)
+  countTransactions!: number;
+
+  @Field(() => CategoryModel, { nullable: true })
+  mostUsedCategory?: CategoryModel | null;
+}

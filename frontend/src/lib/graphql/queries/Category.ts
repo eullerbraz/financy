@@ -1,5 +1,5 @@
 import { gql, type TypedDocumentNode } from '@apollo/client';
-import type { Category } from '../../../types';
+import type { CategoriesMetrics, Category } from '../../../types';
 
 export const LIST_CATEGORIES: TypedDocumentNode<{
   getAllCategoriesByUserId: Category[];
@@ -15,6 +15,24 @@ export const LIST_CATEGORIES: TypedDocumentNode<{
       transactionsAmount
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const CATEGORIES_METRICS: TypedDocumentNode<{
+  getCategoriesMetricsByUserId: CategoriesMetrics;
+}> = gql`
+  query GetCategoriesMetricsByUserId {
+    getCategoriesMetricsByUserId {
+      countCategories
+      countTransactions
+      mostUsedCategory {
+        id
+        description
+        name
+        color
+        icon
+      }
     }
   }
 `;

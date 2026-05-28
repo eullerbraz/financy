@@ -3,6 +3,12 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CategoriesMetricsModel {
+  countCategories: Float!
+  countTransactions: Float!
+  mostUsedCategory: CategoryModel
+}
+
 type CategoryModel {
   color: Colors!
   countTransactions: Float
@@ -76,6 +82,7 @@ type Query {
   getAllCategoriesByUserId: [CategoryModel!]!
   getAllTransactionsByCategoryId(categoryId: String!): [TransactionModel!]!
   getAllTransactionsByUserId: [TransactionModel!]!
+  getCategoriesMetricsByUserId: CategoriesMetricsModel!
   getCategoryById(id: String!): CategoryModel!
   getRecentTransactionsByUserId: TransactionsManyModel!
   getTransactionById(id: String!): TransactionModel!
