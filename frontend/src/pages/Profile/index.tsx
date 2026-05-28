@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { useMutation } from '@apollo/client/react';
 import { LogOut, Mail, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,36 +12,43 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '../../components/ui/input-group';
+import { UPDATE_USER } from '../../lib/graphql/mutations/User';
 import { useAuthStore } from '../../stores/auth';
 
 export function Profile() {
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUserName } = useAuthStore();
   const email = user?.email || '';
 
   const [name, setName] = useState(user?.name || '');
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const initials = name
+  const initials = user?.name
     .split(' ')
     .filter(Boolean)
     .map((part) => part[0]?.toUpperCase())
     .join('')
     .slice(0, 2);
 
+  const [updateUserById, { loading }] = useMutation(UPDATE_USER, {
+    onCompleted() {
+      toast.success('Alterações salvas com sucesso!');
+    },
+    onError() {
+      toast.error('Não foi possível salvar as alterações.');
+    },
+  });
+
   const handleSave = async (event: React.SubmitEvent) => {
     event.preventDefault();
-    setLoading(true);
 
-    try {
-      await Promise.resolve(true);
-      toast.success('Alterações salvas com sucesso!');
-    } catch {
-      toast.error('Não foi possível salvar as alterações.');
-    } finally {
-      setLoading(false);
-    }
+    await updateUserById({
+      variables: {
+        data: { name },
+      },
+    });
+
+    updateUserName(name);
   };
 
   const handleLogout = () => {

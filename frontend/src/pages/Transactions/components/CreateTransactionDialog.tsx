@@ -20,7 +20,10 @@ import {
   SelectValue,
 } from '../../../components/ui/select';
 import { CREATE_TRANSACTION } from '../../../lib/graphql/mutations/Transaction';
-import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
+import {
+  CATEGORIES_METRICS,
+  LIST_CATEGORIES,
+} from '../../../lib/graphql/queries/Category';
 import {
   LIST_RECENT_TRANSACTIONS,
   LIST_TRANSACTIONS,
@@ -52,6 +55,7 @@ export function CreateTransactionDialog({
   const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
     refetchQueries: [
       { query: LIST_CATEGORIES },
+      { query: CATEGORIES_METRICS },
       { query: LIST_RECENT_TRANSACTIONS },
       { query: LIST_TRANSACTIONS },
     ],

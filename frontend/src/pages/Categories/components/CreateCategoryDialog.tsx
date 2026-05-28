@@ -12,7 +12,10 @@ import {
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { CREATE_CATEGORY } from '../../../lib/graphql/mutations/Category';
-import { LIST_CATEGORIES } from '../../../lib/graphql/queries/Category';
+import {
+  CATEGORIES_METRICS,
+  LIST_CATEGORIES,
+} from '../../../lib/graphql/queries/Category';
 import { Colors, IconsEnum } from '../../../types';
 import { CategoryColorInput } from './CategoryColorInput';
 import { CategoryIconInput } from './CategoryIconInput';
@@ -34,7 +37,7 @@ export function CreateCategoryDialog({
   const [color, setColor] = useState<Colors | null>(null);
 
   const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
-    refetchQueries: [{ query: LIST_CATEGORIES }],
+    refetchQueries: [{ query: LIST_CATEGORIES }, { query: CATEGORIES_METRICS }],
     onCompleted() {
       toast.success('Categoria criada com sucesso');
 
