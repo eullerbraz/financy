@@ -7,10 +7,10 @@ import {
 import { SetContextLink } from '@apollo/client/link/context';
 import { useAuthStore } from '../../stores/auth';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const httpLink = new HttpLink({
-  uri: API_URL,
+  uri: VITE_BACKEND_URL,
 });
 
 const authLink = new SetContextLink((prevContext) => {

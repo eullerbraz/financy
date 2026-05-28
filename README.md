@@ -35,7 +35,7 @@ JWT_SECRET="sua-chave-secreta-aqui"
 #### Exemplo de `frontend/.env`
 
 ```env
-VITE_API_URL="http://localhost:4000/graphql"
+VITE_BACKEND_URL="http://localhost:4000/graphql"
 ```
 
 ### 3. Instale as dependencias
